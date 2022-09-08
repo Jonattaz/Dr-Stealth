@@ -29,6 +29,8 @@ namespace PudimdimGames
         public Input Right;
         public Input Left;
         public Input Sprint;
+        public Input Crouching;
+        public Input Proning;
 
         public int MoveAxisForwardRaw{
             get{

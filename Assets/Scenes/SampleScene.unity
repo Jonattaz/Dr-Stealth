@@ -421,6 +421,12 @@ MonoBehaviour:
   Sprint:
     primary: 304
     alternate: 0
+  Crouching:
+    primary: 306
+    alternate: 0
+  Proning:
+    primary: 120
+    alternate: 0
 --- !u!114 &1319806353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,9 +439,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c4ff30a5436e604083188bc3dbfc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runSpeed: 6
-  _sprintSpeed: 10
-  _rotationSharpness: 10
+  _standingSpeed: {x: 6, y: 8}
+  _crouchingSpeed: {x: 2, y: 3}
+  _proningSpeed: {x: 0.5, y: 1}
+  _standingCapsule: {x: 0.25, y: 1.8, z: 0.9}
+  _crouchingCapsule: {x: 0.35, y: 1.35, z: 0.675}
+  _proningCapsule: {x: 0.4, y: 0.4, z: 0.4}
+  _standingRotationSharpness: 10
+  _crouchingRotationSharpness: 7.5
+  _proningRotationSharpness: 5
   _moveSharpness: 10
 --- !u!136 &1319806354
 CapsuleCollider:
