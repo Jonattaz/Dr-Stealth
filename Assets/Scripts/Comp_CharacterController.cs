@@ -26,6 +26,9 @@ namespace PudimdimGames
         private Animator _animator;
         private CapsuleCollider _collider;
         private Comp_PlayerInputs _inputs;
+
+
+        private bool _proning;
         private float _runSpeed;
         private float _sprintSpeed;
         private float _rotationSharpness;
@@ -76,6 +79,10 @@ namespace PudimdimGames
         // Update is called once per frame
         void Update()
         {
+            if(_proning){
+                return;
+            }
+
             // Input Handle
             Vector3 _moveInputVector = new Vector3(_inputs.MoveAxisRightRaw, 0, _inputs.MoveAxisForwardRaw).normalized;
             
@@ -105,6 +112,10 @@ namespace PudimdimGames
         /// LateUpdate is called every frame, if the Behaviour is enabled.
         /// It is called after all Update functions have been called.
         void LateUpdate(){
+            if (_proning){
+                return;
+            }
+            
             switch (_stance){
                 case CharacterStance.Standing:
                     if(_inputs.Crouching.PressedDown()){ RequestStanceChange(CharacterStance.Crouching);}
@@ -139,6 +150,10 @@ namespace PudimdimGames
                         }
                     }else if(newStance == CharacterStance.Proning){
                         if(!CharacterOverlap(_proningCapsule)){
+                            
+                            _newSpeed = 0;
+                            _proning = true;
+                            _animator.SetFloat("Forward", 0);
                             _runSpeed = _proningSpeed.x;
                             _sprintSpeed = _proningSpeed.y;
                             _rotationSharpness = _proningRotationSharpness;
@@ -162,6 +177,11 @@ namespace PudimdimGames
                         }
                     }else if(newStance == CharacterStance.Proning){
                         if(!CharacterOverlap(_proningCapsule)){
+                            
+                            _newSpeed = 0;
+                            _proning = true;
+                            _animator.SetFloat("Forward", 0);
+                            
                             _runSpeed = _proningSpeed.x;
                             _sprintSpeed = _proningSpeed.y;
                             _rotationSharpness = _proningRotationSharpness;
@@ -176,6 +196,11 @@ namespace PudimdimGames
                 case CharacterStance.Proning:
                     if(newStance == CharacterStance.Standing){
                         if(!CharacterOverlap(_standingCapsule)){
+                        
+                            _newSpeed = 0;
+                            _proning = true;
+                            _animator.SetFloat("Forward", 0);
+                            
                             _runSpeed = _standingSpeed.x;
                             _sprintSpeed = _standingSpeed.y;
                             _rotationSharpness = _standingRotationSharpness;
@@ -186,6 +211,11 @@ namespace PudimdimGames
                         }
                     }else if(newStance == CharacterStance.Crouching){
                         if(!CharacterOverlap(_crouchingCapsule)){
+                        
+                            _newSpeed = 0;
+                            _proning = true;
+                            _animator.SetFloat("Forward", 0);
+                        
                             _runSpeed = _crouchingSpeed.x;
                             _sprintSpeed = _crouchingSpeed.y;
                             _rotationSharpness = _crouchingRotationSharpness;
@@ -229,6 +259,16 @@ namespace PudimdimGames
             _collider.center = new Vector3(_collider.center.x, dimensions.z, _collider.center.z);
             _collider.radius = dimensions.x;
             _collider.height = dimensions.y;
+        }
+
+        public void OnSMBEvent(string eventName){
+            switch (eventName){
+                case "ProneEnd":
+                    _proning = false;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
