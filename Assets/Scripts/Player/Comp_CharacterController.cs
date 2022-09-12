@@ -56,8 +56,8 @@ namespace PudimdimGames
         {
             _animator = GetComponent<Animator>();
             _collider = GetComponent<CapsuleCollider>();
-            _inputs = GetComponent<Comp_PlayerInputs>();
-            
+            _inputs = GetComponent<Comp_PlayerInputs>(); 
+
             // Set defaults
             _runSpeed = _standingSpeed.x;
             _sprintSpeed = _standingSpeed.y;
