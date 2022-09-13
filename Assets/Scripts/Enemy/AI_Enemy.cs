@@ -34,9 +34,6 @@ namespace PudimdimGames{
         [SerializeField] private float waitTime;
         [SerializeField] private float startWaitTime = 1f;
 
-        [SerializeField] private Vector3 target;
-
-
         NavMeshAgent nav;
 
         // AI strafe
@@ -67,13 +64,12 @@ namespace PudimdimGames{
             waitTime = startWaitTime;
             randomSpot = Random.Range(0, moveSpots.Length);
             
-            StartCoroutine(TrackTarget());
 
         }
 
         // Update is called once per frame
         void Update(){
-            float distance = Vector3.Distance(target, transform.position);
+            float distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
 
             if(distance > chaseRadius){
                 Patrol();
@@ -88,7 +84,7 @@ namespace PudimdimGames{
                 CheckLOS();
             }
 
-            if(nav.isActiveAndEnable){
+            if(nav.isActiveAndEnabled){
                 if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == false){
                     Patrol();
                     NoiseCheck();
@@ -112,11 +108,11 @@ namespace PudimdimGames{
         }
 
         void NoiseCheck(){
-            float distance = Vector3.Distance(target, transform.position);
+            float distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
 
             if(distance <= noiseTravelDistance){
-                if(Input.GetButton("Fire1")){
-                    noisePosition = target;
+                if(UnityEngine.Input.GetButton("Fire1")){
+                    noisePosition = Comp_CharacterController.playerPos;
                     aiHeardPlayer = true;
                 }else{
                     aiHeardPlayer = false;
@@ -155,13 +151,13 @@ namespace PudimdimGames{
 
         // Check Line Of Sight
         void CheckLOS(){
-            Vector3 direction = target - transform.position;
+            Vector3 direction = Comp_CharacterController.playerPos - transform.position;
             float angle = Vector3.Angle(direction, transform.forward);
 
             if(angle < fieldOfViewAngle * 0.5f){
                 RaycastHit hit;
 
-                if(Physics.Raycast(tansform.position, direction.normalized, out hit, losRadius)){
+                if(Physics.Raycast(transform.position, direction.normalized, out hit, losRadius)){
                     if(hit.collider.tag == "Player"){
                         playerIsInLOS = true;
                         aiMemorizesPlayer = true;
@@ -186,11 +182,11 @@ namespace PudimdimGames{
         }
 
         void ChasePlayer(){
-            float distance = Vector3.Distance(target, transform.position);
+            float distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
             if(distance <= chaseRadius && distance > distToPlayer){
-                nav.SetDestination(target);
+                nav.SetDestination(Comp_CharacterController.playerPos);
             }
-            else if(nav.isActiveAndEnable && distance <= distToPlayer){
+            else if(nav.isActiveAndEnabled && distance <= distToPlayer){
                 randomStrafeDir = Random.Range(0,2);
                 randomStrafeStartTime = Random.Range(t_minStrafe, t_maxStrafe);
 
@@ -210,17 +206,9 @@ namespace PudimdimGames{
         }
 
         void FacePlayer(){
-            Vector3 direction = (target - transform.position).normalized;
+            Vector3 direction = (Comp_CharacterController.playerPos - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            transform.rotation = Quaternion.Slerp(tranform.rotation, lookRotation, Time.deltaTime * facePlayerFactor);
-        }
-
-        IEnumerator TrackTarget(){
-            while(true){
-                target = target.GameObject.transform.position;
-                yield return null;
-            }
-
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * facePlayerFactor);
         }
 
     }

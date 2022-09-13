@@ -7,6 +7,9 @@ namespace PudimdimGames
     public enum CharacterStance{Standing, Crouching, Proning}
     public class Comp_CharacterController : MonoBehaviour
     {
+
+        public static Vector3 playerPos;
+
         [Header("Speed (Normal, Sprinting)")]
         [SerializeField] private Vector2 _standingSpeed = new Vector2(0,0);
         [SerializeField] private Vector2 _crouchingSpeed = new Vector2(0,0);
@@ -74,6 +77,8 @@ namespace PudimdimGames
             }
             _layerMask = _mask;
             _animator.applyRootMotion = false;
+
+            StartCoroutine(TrackTarget());
         }
 
         // Update is called once per frame
@@ -275,6 +280,12 @@ namespace PudimdimGames
             _animator.SetFloat("Forward", _newSpeed);
         }
 
+        IEnumerator TrackTarget(){
+            while(true){
+                playerPos = gameObject.transform.position;
+                yield return null;
+            }
+        }
 
     }
 }
