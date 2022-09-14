@@ -85,30 +85,7 @@ namespace PudimdimGames
         void Update()
         {
             Movement();
-            
-        }
-
-        /// LateUpdate is called every frame, if the Behaviour is enabled.
-        /// It is called after all Update functions have been called.
-        void FixedUpdate(){
-            if (_proning){
-                return;
-            }
-            
-            switch (_stance){
-                case CharacterStance.Standing:
-                    if(_inputs.Crouching.PressedDown()){ RequestStanceChange(CharacterStance.Crouching);}
-                    else if(_inputs.Proning.PressedDown()){ RequestStanceChange(CharacterStance.Proning);}
-                    break;
-                case CharacterStance.Crouching:
-                    if(_inputs.Crouching.PressedDown()){ RequestStanceChange(CharacterStance.Standing);}
-                    else if(_inputs.Proning.PressedDown()){ RequestStanceChange(CharacterStance.Proning);}
-                    break;
-                case CharacterStance.Proning:
-                    if(_inputs.Crouching.PressedDown()){ RequestStanceChange(CharacterStance.Crouching);}
-                    else if(_inputs.Proning.PressedDown()){ RequestStanceChange(CharacterStance.Standing);}
-                    break;
-            }
+            StaceControl();
         }
 
         public bool RequestStanceChange(CharacterStance newStance){
@@ -118,18 +95,15 @@ namespace PudimdimGames
             switch(_stance){
                 case CharacterStance.Standing:
                     if(newStance == CharacterStance.Crouching){
-                        if(!CharacterOverlap(_crouchingCapsule)){
                             _runSpeed = _crouchingSpeed.x;
                             _sprintSpeed = _crouchingSpeed.y;
                             _rotationSharpness = _crouchingRotationSharpness;
                             _stance= newStance;
-                            _animator.CrossFadeInFixedTime(_standToCrouch, 0.5f);
+                            _animator.CrossFadeInFixedTime(_standToCrouch, 0.25f);
                             SetCapsuleDimensions(_crouchingCapsule);
                             return true;
-                        }
-                    }else if(newStance == CharacterStance.Proning){
-                        if(!CharacterOverlap(_proningCapsule)){
-                            
+                        
+                    }else if(newStance == CharacterStance.Proning){    
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
@@ -140,23 +114,18 @@ namespace PudimdimGames
                             _animator.CrossFadeInFixedTime(_standToProne, 0.25f);
                             SetCapsuleDimensions(_proningCapsule);
                             return true;
-                        }
                     }
                     break;
                 case CharacterStance.Crouching:
                     if(newStance == CharacterStance.Standing){
-                        if(!CharacterOverlap(_standingCapsule)){
                             _runSpeed = _standingSpeed.x;
                             _sprintSpeed = _standingSpeed.y;
                             _rotationSharpness = _standingRotationSharpness;
                             _stance= newStance;
-                            _animator.CrossFadeInFixedTime(_crouchToStand, 0.5f);
+                            _animator.CrossFadeInFixedTime(_crouchToStand, 0.25f);
                             SetCapsuleDimensions(_standingCapsule);
                             return true;
-                        }
                     }else if(newStance == CharacterStance.Proning){
-                        if(!CharacterOverlap(_proningCapsule)){
-                            
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
@@ -168,14 +137,11 @@ namespace PudimdimGames
                             _animator.CrossFadeInFixedTime(_crouchToProne, 0.25f);
                             SetCapsuleDimensions(_proningCapsule);
                             return true;
-                        }
                     }
                     break;
                 
                 case CharacterStance.Proning:
-                    if(newStance == CharacterStance.Standing){
-                        if(!CharacterOverlap(_standingCapsule)){
-                        
+                    if(newStance == CharacterStance.Standing){ 
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
@@ -187,10 +153,7 @@ namespace PudimdimGames
                             _animator.CrossFadeInFixedTime(_proneToStand, 0.5f);
                             SetCapsuleDimensions(_standingCapsule);
                             return true;
-                        }
                     }else if(newStance == CharacterStance.Crouching){
-                        if(!CharacterOverlap(_crouchingCapsule)){
-                        
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
@@ -202,7 +165,6 @@ namespace PudimdimGames
                             _animator.CrossFadeInFixedTime(_proneToCrouch, 0.5f);
                             SetCapsuleDimensions(_crouchingCapsule);
                             return true;
-                        }
                     }
                     break;
             }
@@ -260,7 +222,7 @@ namespace PudimdimGames
             Vector3 _moveInputVector = new Vector3(_inputs.MoveAxisRightRaw, 0, _inputs.MoveAxisForwardRaw).normalized;
             
             // Move Speed
-            if(_inputs.Sprint.Pressed()){  _targetSpeed = _moveInputVector != Vector3.zero ? _sprintSpeed : 0; }
+            if(_inputs.Sprint.Pressed()){ _targetSpeed = _moveInputVector != Vector3.zero ? _sprintSpeed : 0; }
             else                        {  _targetSpeed = _moveInputVector != Vector3.zero ? _runSpeed : 0; }
             _newSpeed = Mathf.Lerp(_newSpeed, _targetSpeed, Time.deltaTime * _moveSharpness);
             
@@ -278,6 +240,28 @@ namespace PudimdimGames
             
             // Animations
             _animator.SetFloat("Forward", _newSpeed);
+
+        }
+
+        private void StaceControl(){
+              
+            if(_proning){
+                return;
+            }
+            switch (_stance){
+                case CharacterStance.Standing:
+                    if(_inputs.Crouching.PressedDown()){RequestStanceChange(CharacterStance.Crouching);}
+                    else if(_inputs.Proning.Pressed()){ RequestStanceChange(CharacterStance.Proning);}
+                    break;
+                case CharacterStance.Crouching:
+                    if(_inputs.Crouching.PressedDown()){RequestStanceChange(CharacterStance.Standing);}
+                    else if(_inputs.Proning.Pressed()){ RequestStanceChange(CharacterStance.Proning);}
+                    break;
+                case CharacterStance.Proning:
+                    if(_inputs.Crouching.PressedDown()){RequestStanceChange(CharacterStance.Crouching);}
+                    else if(_inputs.Proning.Pressed()){ RequestStanceChange(CharacterStance.Standing);}
+                    break;
+            }
         }
 
         IEnumerator TrackTarget(){

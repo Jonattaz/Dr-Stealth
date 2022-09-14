@@ -31,7 +31,7 @@ namespace PudimdimGames{
 
 
         // Wait time at waypoint for patrolling
-        [SerializeField] private float waitTime;
+        private float waitTime;
         [SerializeField] private float startWaitTime = 1f;
 
         NavMeshAgent nav;
@@ -52,7 +52,8 @@ namespace PudimdimGames{
         // When to chase
         [SerializeField] private float chaseRadius = 20f;
         [SerializeField] private float facePlayerFactor = 20f;
-        
+        float distance;
+
         /// Awake is called when the script instance is being loaded.
         void Awake(){
             nav = GetComponent<NavMeshAgent>();
@@ -69,7 +70,7 @@ namespace PudimdimGames{
 
         // Update is called once per frame
         void Update(){
-            float distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
+            distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
 
             if(distance > chaseRadius){
                 Patrol();
@@ -108,8 +109,6 @@ namespace PudimdimGames{
         }
 
         void NoiseCheck(){
-            float distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
-
             if(distance <= noiseTravelDistance){
                 if(UnityEngine.Input.GetButton("Fire1")){
                     noisePosition = Comp_CharacterController.playerPos;
