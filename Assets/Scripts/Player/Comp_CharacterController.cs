@@ -92,6 +92,7 @@ namespace PudimdimGames
             Movement();
             ClapController();
             StaceControl();
+            SceneController();
         }
 
         public bool RequestStanceChange(CharacterStance newStance){
@@ -277,6 +278,14 @@ namespace PudimdimGames
                 Clapped = _canClap;
            }
         }
+
+
+        private void SceneController(){
+           if(_inputs.LoadNewScene.PressedDown()){
+               MenuManager.MenuInstance.SceneLoad(0);
+           }
+        }
+
 
         IEnumerator TrackTarget(){
             while(true){

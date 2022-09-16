@@ -10326,6 +10326,10 @@ PrefabInstance:
       propertyPath: Crouching.primary
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 1096145729595461168, guid: 7dac895b487e7434185ba56a976954b2, type: 3}
+      propertyPath: LoadNewScene.primary
+      value: 27
+      objectReference: {fileID: 0}
     - target: {fileID: 1096145729595461169, guid: 7dac895b487e7434185ba56a976954b2, type: 3}
       propertyPath: _standingSpeed.x
       value: 3
