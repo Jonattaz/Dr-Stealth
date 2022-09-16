@@ -31,6 +31,7 @@ namespace PudimdimGames
         public Input Sprint;
         public Input Crouching;
         public Input Proning;
+        public Input Clap;
 
         public int MoveAxisForwardRaw{
             get{

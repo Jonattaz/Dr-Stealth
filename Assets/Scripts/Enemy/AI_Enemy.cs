@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 namespace PudimdimGames{
     public class AI_Enemy : MonoBehaviour{
@@ -9,21 +10,24 @@ namespace PudimdimGames{
         // Patroling randomly between waypoints
         public Transform[] moveSpots;
         private int randomSpot;
+        [SerializeField] private Text debugText;
+        [SerializeField] private Text debugTextAux;
 
+    
         // AI sight
         [SerializeField] private bool playerIsInLOS = false;
-        [SerializeField] private float fieldOfViewAngle = 160f;
-        [SerializeField] private float losRadius = 45f;
+        [SerializeField] private float fieldOfViewAngle;
+        [SerializeField] private float losRadius;
 
         // AI sight and Memory
-        private bool aiMemorizesPlayer = false;
-        [SerializeField] private float memoryStartTime = 10f;
+        [SerializeField]private bool aiMemorizesPlayer = false;
+        [SerializeField] private float memoryStartTime;
         private float  increasingMemoryTime;
 
         // AI hearing
         private Vector3 noisePosition;
-        private bool aiHeardPlayer;
-        [SerializeField] private float noiseTravelDistance = 50f;
+        [SerializeField]private bool aiHeardPlayer;
+        [SerializeField] private float noiseTravelDistance;
         [SerializeField] private float spinSpeed;
         private bool canSpin = false;
         private float isSpinningTime; // Search at player-noise-position
@@ -32,32 +36,27 @@ namespace PudimdimGames{
 
         // Wait time at waypoint for patrolling
         private float waitTime;
-        [SerializeField] private float startWaitTime = 1f;
+        [SerializeField] private float startWaitTime;
 
         NavMeshAgent nav;
 
         // AI strafe
-        [SerializeField] private float distToPlayer = 5.0f; // straferadius
-
-        private float randomStrafeStartTime;
-        private float waitStrafeTime;
-        [SerializeField] private float t_minStrafe; // min and max AI waits once it has reached the "strafe" position before strafing again
-        [SerializeField] private float t_maxStrafe;
-
-        [SerializeField] private Transform strafeRight;
-        [SerializeField] private Transform strafeLeft;
-        private int randomStrafeDir;
+        [SerializeField] private float distToPlayer; // straferadius
         
-
         // When to chase
-        [SerializeField] private float chaseRadius = 20f;
-        [SerializeField] private float facePlayerFactor = 20f;
+        [SerializeField] private float chaseRadius;
+        [SerializeField] private float facePlayerFactor;
         float distance;
+
+        Animator anim;
+
+        float normalSpeed = 2;
 
         /// Awake is called when the script instance is being loaded.
         void Awake(){
             nav = GetComponent<NavMeshAgent>();
             nav.enabled = true;
+            anim = GetComponent<Animator>();
         }
 
         // Start is called before the first frame update
@@ -71,8 +70,9 @@ namespace PudimdimGames{
         // Update is called once per frame
         void Update(){
             distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
+            anim.SetFloat("Speed", nav.speed);
 
-            if(distance > chaseRadius){
+            if(distance > chaseRadius && !aiHeardPlayer){
                 Patrol();
             }
             else if(distance <= chaseRadius){
@@ -89,9 +89,7 @@ namespace PudimdimGames{
                 if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == false){
                     Patrol();
                     NoiseCheck();
-
-
-                    StopCoroutine(AiMemory());
+                StopCoroutine(AiMemory());
                 }else if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == true){
                     canSpin = true;
                     GoToNoisePosition();
@@ -101,7 +99,6 @@ namespace PudimdimGames{
                     ChasePlayer();
                 }else if(aiMemorizesPlayer == true && playerIsInLOS == true){
                     ChasePlayer();
-
                     StartCoroutine(AiMemory());
                 }
             }
@@ -110,20 +107,23 @@ namespace PudimdimGames{
 
         void NoiseCheck(){
             if(distance <= noiseTravelDistance){
-                if(UnityEngine.Input.GetButton("Fire1")){
-                    noisePosition = Comp_CharacterController.playerPos;
+                if(Comp_CharacterController.Clapped){
                     aiHeardPlayer = true;
-                }else{
-                    aiHeardPlayer = false;
-                    canSpin = false;
+                    debugTextAux.text = "Enemy heard a noise";
+                    noisePosition = Comp_CharacterController.playerPos;
+                    Comp_CharacterController.Clapped = !Comp_CharacterController.Clapped;
                 }
+            }else{
+                Comp_CharacterController.Clapped = false;
+                debugTextAux.text = "Enemy heard nothing";
             }
         }
 
         void GoToNoisePosition(){
+            transform.LookAt(noisePosition);
             nav.SetDestination(noisePosition);
-
-            if(Vector3.Distance(transform.position, noisePosition) <= 5f && canSpin == true){
+            debugTextAux.text = "Enemy went to check noise";
+            if(Vector3.Distance(transform.position, noisePosition) <= 3f && canSpin == true){
                 isSpinningTime += Time.deltaTime;
                 transform.Rotate(Vector3.up * spinSpeed, Space.World);
 
@@ -155,9 +155,12 @@ namespace PudimdimGames{
 
             if(angle < fieldOfViewAngle * 0.5f){
                 RaycastHit hit;
-
+                debugTextAux.text = "Enemy is in alert";
+                Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
+                transform.LookAt(LookAtPos);
                 if(Physics.Raycast(transform.position, direction.normalized, out hit, losRadius)){
                     if(hit.collider.tag == "Player"){
+                        debugTextAux.text = "He found you";
                         playerIsInLOS = true;
                         aiMemorizesPlayer = true;
                     }else{
@@ -168,40 +171,42 @@ namespace PudimdimGames{
         }
 
         void Patrol(){
-            nav.SetDestination(moveSpots[randomSpot].position);
-            if(Vector3.Distance(transform.position, moveSpots[randomSpot].position) < 2.0f){
-                if(waitTime <= 0){
-                    randomSpot = Random.Range(0, moveSpots.Length);
+            if(!playerIsInLOS){
+                debugText.text = "Patrol Mode";
+                Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
+                transform.LookAt(LookAtPos);
+                nav.speed = normalSpeed;
+                nav.SetDestination(moveSpots[randomSpot].position);
+                if(Vector3.Distance(transform.position, moveSpots[randomSpot].position) < 2.0f){
+                    if(waitTime <= 0){
+                        randomSpot = Random.Range(0, moveSpots.Length);
 
-                    waitTime = startWaitTime;
-                }else{
-                    waitTime -= Time.deltaTime; 
+                        waitTime = startWaitTime;
+                    }else{
+                        waitTime -= Time.deltaTime; 
+                    }
                 }
             }
         }
 
-        void ChasePlayer(){
-            float distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
-            if(distance <= chaseRadius && distance > distToPlayer){
-                nav.SetDestination(Comp_CharacterController.playerPos);
+        void ChasePlayer(){            
+            if(distance <= chaseRadius && playerIsInLOS){
+               if(distance > distToPlayer){ 
+                    debugText.text = "Chase Mode";
+                    nav.speed = normalSpeed;
+                    transform.LookAt(Comp_CharacterController.playerPos);
+                    nav.SetDestination(Comp_CharacterController.playerPos);
+               }else{
+                    debugTextAux.text = "You got caught";
+                    float idleSpeed = 0;
+                    nav.speed = idleSpeed;
+               }
+            }else{
+                playerIsInLOS = false;
+                aiMemorizesPlayer = false;
+                Patrol();
             }
-            else if(nav.isActiveAndEnabled && distance <= distToPlayer){
-                randomStrafeDir = Random.Range(0,2);
-                randomStrafeStartTime = Random.Range(t_minStrafe, t_maxStrafe);
-
-                if(waitStrafeTime <= 0){
-                    if(randomStrafeDir == 0){
-                        nav.SetDestination(strafeLeft.position);
-                    }
-                    else if( randomStrafeDir == 1){
-                        nav.SetDestination(strafeRight.position);
-                    }
-
-                    waitStrafeTime = randomStrafeStartTime;
-                }else{
-                    waitStrafeTime -= Time.deltaTime;
-                }
-            }
+           
         }
 
         void FacePlayer(){

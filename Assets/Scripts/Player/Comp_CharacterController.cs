@@ -30,7 +30,6 @@ namespace PudimdimGames
         private CapsuleCollider _collider;
         private Comp_PlayerInputs _inputs;
 
-
         private bool _proning;
         private float _runSpeed;
         private float _sprintSpeed;
@@ -54,12 +53,18 @@ namespace PudimdimGames
         private const string _proneToStand = "Base Layer.Prone To Stand";
         private const string _proneToCrouch = "Base Layer.Prone To Crouch";
 
+        [Header("Clap Controller")]
+        [SerializeField] private bool _canClap;
+        [HideInInspector] public static bool Clapped;
+
+
         // Start is called before the first frame update
         void Start()
         {
             _animator = GetComponent<Animator>();
             _collider = GetComponent<CapsuleCollider>();
             _inputs = GetComponent<Comp_PlayerInputs>(); 
+            _canClap = true;
 
             // Set defaults
             _runSpeed = _standingSpeed.x;
@@ -85,6 +90,7 @@ namespace PudimdimGames
         void Update()
         {
             Movement();
+            ClapController();
             StaceControl();
         }
 
@@ -95,6 +101,7 @@ namespace PudimdimGames
             switch(_stance){
                 case CharacterStance.Standing:
                     if(newStance == CharacterStance.Crouching){
+                            _canClap = true;
                             _runSpeed = _crouchingSpeed.x;
                             _sprintSpeed = _crouchingSpeed.y;
                             _rotationSharpness = _crouchingRotationSharpness;
@@ -102,8 +109,8 @@ namespace PudimdimGames
                             _animator.CrossFadeInFixedTime(_standToCrouch, 0.25f);
                             SetCapsuleDimensions(_crouchingCapsule);
                             return true;
-                        
                     }else if(newStance == CharacterStance.Proning){    
+                            _canClap = false;
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
@@ -118,6 +125,7 @@ namespace PudimdimGames
                     break;
                 case CharacterStance.Crouching:
                     if(newStance == CharacterStance.Standing){
+                            _canClap = true;
                             _runSpeed = _standingSpeed.x;
                             _sprintSpeed = _standingSpeed.y;
                             _rotationSharpness = _standingRotationSharpness;
@@ -129,7 +137,7 @@ namespace PudimdimGames
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
-                            
+                            _canClap = false;
                             _runSpeed = _proningSpeed.x;
                             _sprintSpeed = _proningSpeed.y;
                             _rotationSharpness = _proningRotationSharpness;
@@ -145,7 +153,7 @@ namespace PudimdimGames
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
-                            
+                            _canClap = true;
                             _runSpeed = _standingSpeed.x;
                             _sprintSpeed = _standingSpeed.y;
                             _rotationSharpness = _standingRotationSharpness;
@@ -157,7 +165,7 @@ namespace PudimdimGames
                             _newSpeed = 0;
                             _proning = true;
                             _animator.SetFloat("Forward", 0);
-                        
+                            _canClap = true;
                             _runSpeed = _crouchingSpeed.x;
                             _sprintSpeed = _crouchingSpeed.y;
                             _rotationSharpness = _crouchingRotationSharpness;
@@ -262,6 +270,12 @@ namespace PudimdimGames
                     else if(_inputs.Proning.Pressed()){ RequestStanceChange(CharacterStance.Standing);}
                     break;
             }
+        }
+
+        private void ClapController(){
+           if(_inputs.Clap.PressedDown()){
+                Clapped = _canClap;
+           }
         }
 
         IEnumerator TrackTarget(){
