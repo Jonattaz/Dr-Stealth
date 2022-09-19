@@ -51,6 +51,7 @@ namespace PudimdimGames{
         Animator anim;
 
         float normalSpeed = 2;
+        [SerializeField] private bool caught; 
 
         /// Awake is called when the script instance is being loaded.
         void Awake(){
@@ -63,7 +64,7 @@ namespace PudimdimGames{
         void Start(){
             waitTime = startWaitTime;
             randomSpot = Random.Range(0, moveSpots.Length);
-            
+            caught = false;
 
         }
 
@@ -72,37 +73,38 @@ namespace PudimdimGames{
             distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
             anim.SetFloat("Speed", nav.speed);
 
-            if(distance > chaseRadius && !aiHeardPlayer){
-                Patrol();
-            }
-            else if(distance <= chaseRadius){
-                ChasePlayer();
-
-                FacePlayer();
-            }
-
-            if(distance <= losRadius){
-                CheckLOS();
-            }
-
-            if(nav.isActiveAndEnabled){
-                if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == false){
+           if(!caught){
+                if(distance > chaseRadius && !aiHeardPlayer){
                     Patrol();
-                    NoiseCheck();
-                StopCoroutine(AiMemory());
-                }else if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == true){
-                    canSpin = true;
-                    GoToNoisePosition();
-                }else if(playerIsInLOS == true){
-                    aiMemorizesPlayer = true;
-                    FacePlayer();
-                    ChasePlayer();
-                }else if(aiMemorizesPlayer == true && playerIsInLOS == true){
-                    ChasePlayer();
-                    StartCoroutine(AiMemory());
                 }
-            }
+                else if(distance <= chaseRadius){
+                    ChasePlayer();
 
+                    FacePlayer();
+                }
+
+                if(distance <= losRadius){
+                    CheckLOS();
+                }
+
+                if(nav.isActiveAndEnabled){
+                    if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == false){
+                        Patrol();
+                        NoiseCheck();
+                    StopCoroutine(AiMemory());
+                    }else if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == true){
+                        canSpin = true;
+                        GoToNoisePosition();
+                    }else if(playerIsInLOS == true){
+                        aiMemorizesPlayer = true;
+                        FacePlayer();
+                        ChasePlayer();
+                    }else if(aiMemorizesPlayer == true && playerIsInLOS == true){
+                        ChasePlayer();
+                        StartCoroutine(AiMemory());
+                    }
+                }
+           }
         }
 
         void NoiseCheck(){
@@ -200,11 +202,11 @@ namespace PudimdimGames{
                     debugTextAux.text = "You got caught";
                     float idleSpeed = 0;
                     nav.speed = idleSpeed;
+                    caught = true;
                }
             }else{
                 playerIsInLOS = false;
                 aiMemorizesPlayer = false;
-                Patrol();
             }
            
         }
