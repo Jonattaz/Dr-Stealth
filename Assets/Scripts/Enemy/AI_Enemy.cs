@@ -74,20 +74,10 @@ namespace PudimdimGames{
             anim.SetFloat("Speed", nav.speed);
 
            if(!caught){
-                if(distance > chaseRadius && !aiHeardPlayer){
-                    Patrol();
-                }
-                else if(distance <= chaseRadius){
-                    ChasePlayer();
-
-                    FacePlayer();
-                }
-
-                if(distance <= losRadius){
-                    CheckLOS();
-                }
+               
 
                 if(nav.isActiveAndEnabled){
+                    CheckLOS();
                     if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == false){
                         Patrol();
                         NoiseCheck();
@@ -114,10 +104,11 @@ namespace PudimdimGames{
                     debugTextAux.text = "Enemy heard a noise";
                     noisePosition = Comp_CharacterController.playerPos;
                     Comp_CharacterController.Clapped = !Comp_CharacterController.Clapped;
+                }else{
+                    aiHeardPlayer = false;
+                    Comp_CharacterController.Clapped = false;
+                    debugTextAux.text = "You're in area that an enemy can hear you";
                 }
-            }else{
-                Comp_CharacterController.Clapped = false;
-                debugTextAux.text = "Enemy heard nothing";
             }
         }
 
@@ -154,26 +145,23 @@ namespace PudimdimGames{
         void CheckLOS(){
             Vector3 direction = Comp_CharacterController.playerPos - transform.position;
             float angle = Vector3.Angle(direction, transform.forward);
-
+            debugTextAux.text = "";
             if(angle < fieldOfViewAngle * 0.5f){
                 RaycastHit hit;
-                debugTextAux.text = "Enemy is in alert";
-                Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
-                transform.LookAt(LookAtPos);
                 if(Physics.Raycast(transform.position, direction.normalized, out hit, losRadius)){
                     if(hit.collider.tag == "Player"){
                         debugTextAux.text = "He found you";
                         playerIsInLOS = true;
                         aiMemorizesPlayer = true;
-                    }else{
-                        playerIsInLOS = false;
                     }
-                }
+                }else{
+                        playerIsInLOS = false;
+                        aiMemorizesPlayer = false;
+                    }
             }
         }
 
         void Patrol(){
-            if(!playerIsInLOS){
                 debugText.text = "Patrol Mode";
                 Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
                 transform.LookAt(LookAtPos);
@@ -188,11 +176,10 @@ namespace PudimdimGames{
                         waitTime -= Time.deltaTime; 
                     }
                 }
-            }
         }
 
         void ChasePlayer(){            
-            if(distance <= chaseRadius && playerIsInLOS){
+            //if(distance <= chaseRadius){
                if(distance > distToPlayer){ 
                     debugText.text = "Chase Mode";
                     nav.speed = normalSpeed;
@@ -204,11 +191,7 @@ namespace PudimdimGames{
                     nav.speed = idleSpeed;
                     caught = true;
                }
-            }else{
-                playerIsInLOS = false;
-                aiMemorizesPlayer = false;
-            }
-           
+            
         }
 
         void FacePlayer(){
