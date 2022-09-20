@@ -107,7 +107,7 @@ namespace PudimdimGames{
                 }else{
                     aiHeardPlayer = false;
                     Comp_CharacterController.Clapped = false;
-                    debugTextAux.text = "You're in area that an enemy can hear you";
+                    debugTextAux.text = "Enemy can hear you";
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace PudimdimGames{
         void GoToNoisePosition(){
             transform.LookAt(noisePosition);
             nav.SetDestination(noisePosition);
-            debugTextAux.text = "Enemy went to check noise";
+            debugTextAux.text = "Enemy heard a noise";
             if(Vector3.Distance(transform.position, noisePosition) <= 3f && canSpin == true){
                 isSpinningTime += Time.deltaTime;
                 transform.Rotate(Vector3.up * spinSpeed, Space.World);
