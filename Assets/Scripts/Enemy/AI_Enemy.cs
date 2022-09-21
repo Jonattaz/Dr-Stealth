@@ -5,14 +5,14 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 
 namespace PudimdimGames{
+
     public class AI_Enemy : MonoBehaviour{
         
         // Patroling randomly between waypoints
         public Transform[] moveSpots;
         private int randomSpot;
-        [SerializeField] private Text debugText;
-        [SerializeField] private Text debugTextAux;
-
+        [HideInInspector]
+        public string stateText;
     
         // AI sight
         [SerializeField] private bool playerIsInLOS = false;
@@ -53,6 +53,8 @@ namespace PudimdimGames{
         float normalSpeed = 2;
         [SerializeField] private bool caught; 
 
+        public static AI_Enemy EnemyInstance;
+
         /// Awake is called when the script instance is being loaded.
         void Awake(){
             nav = GetComponent<NavMeshAgent>();
@@ -62,6 +64,7 @@ namespace PudimdimGames{
 
         // Start is called before the first frame update
         void Start(){
+            EnemyInstance = this;
             waitTime = startWaitTime;
             randomSpot = Random.Range(0, moveSpots.Length);
             caught = false;
@@ -101,13 +104,12 @@ namespace PudimdimGames{
             if(distance <= noiseTravelDistance){
                 if(Comp_CharacterController.Clapped){
                     aiHeardPlayer = true;
-                    debugTextAux.text = "Enemy heard a noise";
+                    stateText = "Enemy Heard a Noise";
                     noisePosition = Comp_CharacterController.playerPos;
                     Comp_CharacterController.Clapped = !Comp_CharacterController.Clapped;
                 }else{
                     aiHeardPlayer = false;
                     Comp_CharacterController.Clapped = false;
-                    debugTextAux.text = "Enemy can hear you";
                 }
             }
         }
@@ -115,7 +117,7 @@ namespace PudimdimGames{
         void GoToNoisePosition(){
             transform.LookAt(noisePosition);
             nav.SetDestination(noisePosition);
-            debugTextAux.text = "Enemy heard a noise";
+            stateText = "Enemy heard a noise";
             if(Vector3.Distance(transform.position, noisePosition) <= 3f && canSpin == true){
                 isSpinningTime += Time.deltaTime;
                 transform.Rotate(Vector3.up * spinSpeed, Space.World);
@@ -145,12 +147,10 @@ namespace PudimdimGames{
         void CheckLOS(){
             Vector3 direction = Comp_CharacterController.playerPos - transform.position;
             float angle = Vector3.Angle(direction, transform.forward);
-            debugTextAux.text = "";
             if(angle < fieldOfViewAngle * 0.5f){
                 RaycastHit hit;
                 if(Physics.Raycast(transform.position, direction.normalized, out hit, losRadius)){
                     if(hit.collider.tag == "Player"){
-                        debugTextAux.text = "He found you";
                         playerIsInLOS = true;
                         aiMemorizesPlayer = true;
                     }
@@ -162,7 +162,7 @@ namespace PudimdimGames{
         }
 
         void Patrol(){
-                debugText.text = "Patrol Mode";
+                stateText = "Patrol Mode";
                 Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
                 transform.LookAt(LookAtPos);
                 nav.speed = normalSpeed;
@@ -181,12 +181,12 @@ namespace PudimdimGames{
         void ChasePlayer(){            
             //if(distance <= chaseRadius){
                if(distance > distToPlayer){ 
-                    debugText.text = "Chase Mode";
+                    stateText = "Chase Mode";
                     nav.speed = normalSpeed;
                     transform.LookAt(Comp_CharacterController.playerPos);
                     nav.SetDestination(Comp_CharacterController.playerPos);
                }else{
-                    debugTextAux.text = "You got caught";
+                    stateText = "You Got Caught";
                     float idleSpeed = 0;
                     nav.speed = idleSpeed;
                     caught = true;
@@ -203,10 +203,6 @@ namespace PudimdimGames{
     }
 
 }
-
-
-
-
 
 
 
