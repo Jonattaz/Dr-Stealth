@@ -179,7 +179,6 @@ namespace PudimdimGames{
         }
 
         void ChasePlayer(){            
-            //if(distance <= chaseRadius){
                if(distance > distToPlayer){ 
                     stateText = "Chase Mode";
                     nav.speed = normalSpeed;
