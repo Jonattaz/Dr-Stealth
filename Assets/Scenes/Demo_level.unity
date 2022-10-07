@@ -3179,7 +3179,7 @@ PrefabInstance:
     - target: {fileID: 5026814444205332742, guid: 285e3529d1cd9ca49a0ffafe1c2483a3, type: 3}
       propertyPath: stateText
       value: 
-      objectReference: {fileID: 154977714}
+      objectReference: {fileID: 0}
     - target: {fileID: 5026814444205332742, guid: 285e3529d1cd9ca49a0ffafe1c2483a3, type: 3}
       propertyPath: strafeLeft
       value: 
