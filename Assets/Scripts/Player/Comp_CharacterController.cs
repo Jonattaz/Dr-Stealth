@@ -273,6 +273,7 @@ namespace PudimdimGames
             }
         }
 
+        // EDITAR AQUI
         private void ClapController(){
            if(_inputs.Clap.PressedDown()){
                 Clapped = _canClap;

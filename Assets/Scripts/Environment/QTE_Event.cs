@@ -21,7 +21,7 @@ namespace PudimdimGames{
         // Update is called once per frame
         void Update()
         {
-            if(UnityEngine.Input.GetKeyDown("a")){
+            if(UnityEngine.Input.GetKeyDown("e")){
                 fillAmount += fillValue;
             }
 
@@ -32,8 +32,13 @@ namespace PudimdimGames{
                 fillAmount -= fillHold;
             }
 
-            if(fillAmount > 0){
+            if(fillAmount < 0){
                 fillAmount = 0;
+            }
+
+            if(fillAmount >= 1){
+                Door.DoorInstance.canOpenGet = true;
+                Debug.Log("Foi");
             }
 
             GetComponent<Image>().fillAmount = fillAmount;
