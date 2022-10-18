@@ -52,6 +52,7 @@ namespace PudimdimGames{
         {
             canOpen = canOpenGet;
             buttonMessage = true;
+            CountDownTimer.TimerInstance.canCount = true;
 
             if (UnityEngine.Input.GetKey("e") && canOpen)
             {
@@ -63,17 +64,22 @@ namespace PudimdimGames{
 
         void OnTriggerStay(Collider other)
         {
-            canOpen = canOpenGet;
-            buttonMessage = true;
-            if (UnityEngine.Input.GetKey("e") && canOpen)
-            {
-                swivelAnnimation.SetBool("buttonDown", true);
+            if(!CountDownTimer.TimerInstance.noise){
+                canOpen = canOpenGet;
+                buttonMessage = true;
+                if (UnityEngine.Input.GetKey("e") && canOpen)
+                {
+                    swivelAnnimation.SetBool("buttonDown", true);
+                }
             }
         }
 
 
         void OnTriggerExit(Collider other)
         {
+            CountDownTimer.TimerInstance.canCount = false;
+            CountDownTimer.TimerInstance.restart = true;
+            CountDownTimer.TimerInstance.noise = false;
             canOpen = canOpenGet;
             swivelAnnimation.SetBool("buttonDown", false);
             buttonMessage = false;
