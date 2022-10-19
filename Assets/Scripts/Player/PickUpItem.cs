@@ -6,18 +6,36 @@ namespace PudimdimGames{
 
     public class PickUpItem : MonoBehaviour
     {
-        Transform pickUpPoint;
-        Transform player;
-        Rigidbody rb;
+        private Transform pickUpPoint;
+        private Transform player;
+        private Rigidbody rb;
 
-        [SerializeField] float pickUpDistance;
-        [SerializeField] float forceMulti;
-        [SerializeField] bool readyToThrow;
-        [SerializeField] bool itemIsPicked;
+        [SerializeField] private float pickUpDistance;
+        [SerializeField] private float forceMulti;
+        [SerializeField] private bool readyToThrow;
+        [SerializeField] private bool itemIsPicked;
+        [SerializeField] private LineRenderer lineRenderer;
+        [SerializeField] private Transform releasePosition;
+        
+        [Header("Display Controls")]
+        [Range(10, 100)]
+        [SerializeField] private int linePoints = 25;
+        [SerializeField] [Range(0.01f, 0.10f)] 
 
+        private float timeBetweenPoints = 0.01f;
+        private LayerMask itemCollisionMask;
 
+        
         // Start is called before the first frame update
         void Start(){
+            int itemLayer = this.gameObject.layer;
+            for (int i = 0; i < 32; i++){
+                if (!Physics.GetIgnoreLayerCollision(itemLayer, i)){
+                    itemCollisionMask |= 1 << i;
+                }
+            }
+
+
             rb = GetComponent<Rigidbody>();
             player = UnityEngine.GameObject.Find("Player").transform;
             pickUpPoint = UnityEngine.GameObject.Find("PickUpPoint").transform;
@@ -27,14 +45,17 @@ namespace PudimdimGames{
         void Update(){
 
             if(UnityEngine.Input.GetKey(KeyCode.F) && itemIsPicked == true && readyToThrow){
-                forceMulti += 300 * Time.deltaTime;
+                if(forceMulti <= 1000){
+                    forceMulti += 300 * Time.deltaTime;
+                }
+                
+                DrawProjection();
             }            
 
             pickUpDistance = Vector3.Distance(player.position, transform.position);
 
             if(pickUpDistance <= 2){
                 if(UnityEngine.Input.GetKeyDown(KeyCode.F) && itemIsPicked == false && pickUpPoint.childCount < 1){
-                    
                     GetComponent<Rigidbody>().useGravity = false;
                     GetComponent<BoxCollider>().enabled = false;
                     this.transform.position = pickUpPoint.position;
@@ -47,9 +68,8 @@ namespace PudimdimGames{
 
             if(UnityEngine.Input.GetKeyUp(KeyCode.F) && itemIsPicked == true){
                 readyToThrow = true;
-
                 if(forceMulti > 10){
-                    rb.AddForce(player.transform.forward * forceMulti);
+                    rb.AddForce(player.transform.forward * forceMulti );
                     this.transform.parent = null;
                     GetComponent<Rigidbody>().useGravity = true;
                     GetComponent<BoxCollider>().enabled = true;
@@ -57,12 +77,38 @@ namespace PudimdimGames{
 
                     forceMulti = 0;
                     readyToThrow = false;
+                    lineRenderer.enabled = false;
                 }
                 forceMulti = 0;
             }
-
-
         }
+        
+        private void DrawProjection(){
+            lineRenderer.enabled = true;
+            lineRenderer.positionCount = Mathf.CeilToInt(linePoints / timeBetweenPoints) + 1;
+            Vector3 startPosition = pickUpPoint.position;
+            Vector3 startVelocity = forceMulti * pickUpPoint.transform.forward / rb.mass;
+            int i = 0;
+            lineRenderer.SetPosition(i,startPosition);
+
+            for (float time = 0; time < linePoints; time += timeBetweenPoints){
+                i++;
+                Vector3 point = startPosition + time * startVelocity;
+                point.y = startPosition.y + startVelocity.y * time + (Physics.gravity.y / 2f * time * time);
+                lineRenderer.SetPosition(i, point);
+
+                Vector3 lastPosition = lineRenderer.GetPosition(i - 1);
+
+                if(Physics.Raycast(lastPosition, (point - lastPosition).normalized, out RaycastHit hit, 
+                (point - lastPosition).magnitude, itemCollisionMask)){
+                    lineRenderer.SetPosition(i, hit.point);
+                    lineRenderer.positionCount = i + 1;
+                    return;
+
+                }
+            }
+        }
+
     }
 }
 
