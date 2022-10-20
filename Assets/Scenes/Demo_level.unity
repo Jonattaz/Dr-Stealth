@@ -31811,6 +31811,10 @@ MonoBehaviour:
   itemIsPicked: 0
   lineRenderer: {fileID: 1510775898}
   releasePosition: {fileID: 1510775897}
+  noiseMode: 0
+  itemSound: 0
+  getItemPos: {x: 0, y: 0, z: 0}
+  getItemSound: 0
   linePoints: 24
   timeBetweenPoints: 0.177
 --- !u!120 &1802608309

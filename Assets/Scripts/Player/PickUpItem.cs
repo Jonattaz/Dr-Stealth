@@ -9,6 +9,9 @@ namespace PudimdimGames{
         private Transform pickUpPoint;
         private Transform player;
         private Rigidbody rb;
+        public static PickUpItem pickUpInstance;
+        private Vector3 itemPos;
+ 
 
         [SerializeField] private float pickUpDistance;
         [SerializeField] private float forceMulti;
@@ -16,7 +19,13 @@ namespace PudimdimGames{
         [SerializeField] private bool itemIsPicked;
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private Transform releasePosition;
+        [SerializeField] private bool noiseMode;
+        [SerializeField] private bool itemSound;
         
+        [HideInInspector] public Vector3 getItemPos;
+        [HideInInspector] public bool getItemSound;
+
+
         [Header("Display Controls")]
         [Range(10, 100)]
         [SerializeField] private int linePoints = 25;
@@ -28,6 +37,9 @@ namespace PudimdimGames{
         
         // Start is called before the first frame update
         void Start(){
+            itemSound = false;
+            pickUpInstance = this;
+            noiseMode = false;
             int itemLayer = this.gameObject.layer;
             for (int i = 0; i < 32; i++){
                 if (!Physics.GetIgnoreLayerCollision(itemLayer, i)){
@@ -35,6 +47,7 @@ namespace PudimdimGames{
                 }
             }
 
+            StartCoroutine(TrackTarget());
 
             rb = GetComponent<Rigidbody>();
             player = UnityEngine.GameObject.Find("Player").transform;
@@ -75,6 +88,7 @@ namespace PudimdimGames{
                     GetComponent<BoxCollider>().enabled = true;
                     itemIsPicked = false;
 
+                    noiseMode = true;
                     forceMulti = 0;
                     readyToThrow = false;
                     lineRenderer.enabled = false;
@@ -106,6 +120,30 @@ namespace PudimdimGames{
                     return;
 
                 }
+            }
+        }
+
+        void OnCollisionEnter(Collision other){
+            getItemSound = itemSound;
+            if(noiseMode){
+                itemSound = true;
+            }
+        }
+
+        void OnCollisionStay(Collision other)
+        {
+            getItemSound = itemSound;
+            noiseMode = false;
+            if(!noiseMode){
+                itemSound =false;
+            }
+        }
+
+         IEnumerator TrackTarget(){
+            while(true){
+                itemPos = gameObject.transform.position;
+                getItemPos = itemPos;
+                yield return null;
             }
         }
 

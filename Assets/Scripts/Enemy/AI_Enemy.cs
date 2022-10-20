@@ -102,12 +102,11 @@ namespace PudimdimGames{
 
         void NoiseCheck(){
             if(distance <= noiseTravelDistance){
-                // EDITAR AQUI - LEMBRAR - COLOCAR O CENÁRIO COMO OBSTACULO PARA A LINHA DE TRAJETÓRIA
-                if(Comp_CharacterController.Clapped || CountDownTimer.TimerInstance.noise){
+                if(PickUpItem.pickUpInstance.getItemSound){
                     aiHeardPlayer = true;
                     stateText = "Enemy Heard a Noise";
                     Debug.Log("Enemy Heard a Noise");
-                    noisePosition = Comp_CharacterController.playerPos;
+                    noisePosition = PickUpItem.pickUpInstance.getItemPos;
                     Comp_CharacterController.Clapped = !Comp_CharacterController.Clapped;
                 }else{
                     aiHeardPlayer = false;
