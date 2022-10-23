@@ -46,14 +46,14 @@ namespace PudimdimGames{
         // When to chase
         [SerializeField] private float chaseRadius;
         [SerializeField] private float facePlayerFactor;
+        [SerializeField] private bool move;
         float distance;
+        float idleSpeed = 0;
 
         Animator anim;
 
         float normalSpeed = 2;
         [SerializeField] private bool caught; 
-
-        public static AI_Enemy EnemyInstance;
 
         /// Awake is called when the script instance is being loaded.
         void Awake(){
@@ -64,7 +64,6 @@ namespace PudimdimGames{
 
         // Start is called before the first frame update
         void Start(){
-            EnemyInstance = this;
             waitTime = startWaitTime;
             randomSpot = Random.Range(0, moveSpots.Length);
             caught = false;
@@ -107,16 +106,15 @@ namespace PudimdimGames{
                     stateText = "Enemy Heard a Noise";
                     Debug.Log("Enemy Heard a Noise");
                     noisePosition = PickUpItem.pickUpInstance.getItemPos;
-                    Comp_CharacterController.Clapped = !Comp_CharacterController.Clapped;
                 }else{
                     aiHeardPlayer = false;
-                    Comp_CharacterController.Clapped = false;
                 }
             }
         }
 
         void GoToNoisePosition(){
             transform.LookAt(noisePosition);
+            nav.speed = normalSpeed;
             nav.SetDestination(noisePosition);
             stateText = "Enemy heard a noise";
             if(Vector3.Distance(transform.position, noisePosition) <= 3f && canSpin == true){
@@ -163,6 +161,7 @@ namespace PudimdimGames{
         }
 
         void Patrol(){
+            if(move){    
                 stateText = "Patrol Mode";
                 Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
                 transform.LookAt(LookAtPos);
@@ -177,6 +176,9 @@ namespace PudimdimGames{
                         waitTime -= Time.deltaTime; 
                     }
                 }
+            }else{
+                nav.speed = idleSpeed;
+            }
         }
 
         void ChasePlayer(){            
@@ -187,7 +189,6 @@ namespace PudimdimGames{
                     nav.SetDestination(Comp_CharacterController.playerPos);
                }else{
                     stateText = "You Got Caught";
-                    float idleSpeed = 0;
                     nav.speed = idleSpeed;
                     caught = true;
                }

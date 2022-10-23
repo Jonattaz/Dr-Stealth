@@ -17,6 +17,7 @@ namespace PudimdimGames{
         private int IconId;
 
         [SerializeField] private GameObject[] detectionIcons;
+        [SerializeField] private GameObject aiLocal;
 
         // Start is called before the first frame update
         void Start()
@@ -32,7 +33,7 @@ namespace PudimdimGames{
 
         void IconChanger(){
 
-            stateHolder = AI_Enemy.EnemyInstance.stateText;
+            stateHolder = aiLocal.GetComponent<AI_Enemy>().stateText;
 
             switch (stateHolder)
             {
