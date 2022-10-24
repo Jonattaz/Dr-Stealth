@@ -74,6 +74,12 @@ namespace SlimUI.ModernMenu{
 		[Tooltip("Highlight Image for when GENERAL Sub-Tab is selected in KEY BINDINGS")]
 		public GameObject lineGeneral;
 
+		[Header("TransitionScreens")]
+		[Tooltip("These are the screens, settings and credits")]
+		public GameObject settings;
+		public GameObject credits;
+
+
 		[Header("LOADING SCREEN")]
 		public GameObject loadingMenu;
 		public Slider loadBar;
@@ -147,6 +153,21 @@ namespace SlimUI.ModernMenu{
 			CameraObject.SetFloat("Animate",0);
 		}
 
+		public void ToSettings(){
+			if(credits)
+				credits.SetActive(false);
+			
+			settings.SetActive(true);
+		}
+		
+		public void ToCredits(){
+			if(settings)
+				settings.SetActive(false);
+			
+			credits.SetActive(true);
+		}
+		
+
 		void DisablePanels(){
 			PanelControls.SetActive(false);
 			PanelVideo.SetActive(false);
@@ -181,6 +202,7 @@ namespace SlimUI.ModernMenu{
 		public void ControlsPanel(){
 			DisablePanels();
 			PanelControls.SetActive(true);
+			PanelMovement.SetActive(true);
 			lineControls.SetActive(true);
 		}
 

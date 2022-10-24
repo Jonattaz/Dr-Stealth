@@ -13,21 +13,21 @@ MonoBehaviour:
   m_Name: Theme Editor
   m_EditorClassIdentifier: 
   custom1:
-    graphic1: {r: 0.5058824, g: 0, b: 1, a: 1}
+    graphic1: {r: 0.62352943, g: 0.60784316, b: 0.60784316, a: 1}
     text1:
       serializedVersion: 2
       rgba: 4294967295
   custom2:
-    graphic2: {r: 0.5058824, g: 0, b: 1, a: 1}
+    graphic2: {r: 0.62352943, g: 0.60784316, b: 0.60784316, a: 1}
     text2:
       serializedVersion: 2
       rgba: 4294966499
   custom3:
-    graphic3: {r: 0.50582314, g: 0, b: 1, a: 1}
+    graphic3: {r: 0.6226415, g: 0.6079566, b: 0.6079566, a: 1}
     text3:
       serializedVersion: 2
       rgba: 4293066721
-  currentColor: {r: 0.5058824, g: 0, b: 1, a: 1}
+  currentColor: {r: 0.62352943, g: 0.60784316, b: 0.60784316, a: 1}
   textColor:
     serializedVersion: 2
     rgba: 4294967295

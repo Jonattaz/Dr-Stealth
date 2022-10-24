@@ -41,20 +41,20 @@ namespace SlimUI.ModernMenu{
 		public GameObject difficultyhardcoretext;
 		public GameObject difficultyhardcoretextLINE;
 
-		[Header("CONTROLS SETTINGS")]
+		/*[Header("CONTROLS SETTINGS")]
 		public GameObject invertmousetext;
 
 		// sliders
-		public GameObject musicSlider;
 		public GameObject sensitivityXSlider;
 		public GameObject sensitivityYSlider;
 		public GameObject mouseSmoothSlider;
 
-		private float sliderValue = 0.0f;
+	
 		private float sliderValueXSensitivity = 0.0f;
 		private float sliderValueYSensitivity = 0.0f;
-		private float sliderValueSmoothing = 0.0f;
-		
+		private float sliderValueSmoothing = 0.0f; */
+		public GameObject musicSlider;
+		private float sliderValue = 0.0f;	
 
 		public void  Start (){
 			// check difficulty
@@ -70,9 +70,9 @@ namespace SlimUI.ModernMenu{
 
 			// check slider values
 			musicSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("MusicVolume");
-			sensitivityXSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("XSensitivity");
-			sensitivityYSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("YSensitivity");
-			mouseSmoothSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("MouseSmoothing");
+			//sensitivityXSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("XSensitivity");
+			//sensitivityYSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("YSensitivity");
+			//mouseSmoothSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("MouseSmoothing");
 
 			// check full screen
 			if(Screen.fullScreen == true){
@@ -154,13 +154,13 @@ namespace SlimUI.ModernMenu{
 				vsynctext.GetComponent<TMP_Text>().text = "on";
 			}
 
-			// check mouse inverse
+			/* check mouse inverse
 			if(PlayerPrefs.GetInt("Inverted")==0){
 				invertmousetext.GetComponent<TMP_Text>().text = "off";
 			}
 			else if(PlayerPrefs.GetInt("Inverted")==1){
 				invertmousetext.GetComponent<TMP_Text>().text = "on";
-			}
+			}*/
 
 			// check motion blur
 			if(PlayerPrefs.GetInt("MotionBlur")==0){
@@ -200,10 +200,10 @@ namespace SlimUI.ModernMenu{
 		}
 
 		public void Update (){
-			//sliderValue = musicSlider.GetComponent<Slider>().value;
-			sliderValueXSensitivity = sensitivityXSlider.GetComponent<Slider>().value;
-			sliderValueYSensitivity = sensitivityYSlider.GetComponent<Slider>().value;
-			sliderValueSmoothing = mouseSmoothSlider.GetComponent<Slider>().value;
+			sliderValue = musicSlider.GetComponent<Slider>().value;
+			//sliderValueXSensitivity = sensitivityXSlider.GetComponent<Slider>().value;
+			//sliderValueYSensitivity = sensitivityYSlider.GetComponent<Slider>().value;
+			//sliderValueSmoothing = mouseSmoothSlider.GetComponent<Slider>().value;
 		}
 
 		public void FullScreen (){
@@ -222,7 +222,7 @@ namespace SlimUI.ModernMenu{
 			PlayerPrefs.SetFloat("MusicVolume", musicSlider.GetComponent<Slider>().value);
 		}
 
-		public void SensitivityXSlider (){
+		/*public void SensitivityXSlider (){
 			PlayerPrefs.SetFloat("XSensitivity", sliderValueXSensitivity);
 		}
 
@@ -233,7 +233,7 @@ namespace SlimUI.ModernMenu{
 		public void SensitivitySmoothing (){
 			PlayerPrefs.SetFloat("MouseSmoothing", sliderValueSmoothing);
 			Debug.Log(PlayerPrefs.GetFloat("MouseSmoothing"));
-		}
+		}*/
 
 		// the playerprefs variable that is checked to enable hud while in game
 		public void ShowHUD (){
@@ -361,7 +361,7 @@ namespace SlimUI.ModernMenu{
 			}
 		}
 
-		public void InvertMouse (){
+		/*public void InvertMouse (){
 			if(PlayerPrefs.GetInt("Inverted")==0){
 				PlayerPrefs.SetInt("Inverted",1);
 				invertmousetext.GetComponent<TMP_Text>().text = "on";
@@ -370,7 +370,7 @@ namespace SlimUI.ModernMenu{
 				PlayerPrefs.SetInt("Inverted",0);
 				invertmousetext.GetComponent<TMP_Text>().text = "off";
 			}
-		}
+		}*/
 
 		public void MotionBlur (){
 			if(PlayerPrefs.GetInt("MotionBlur")==0){
