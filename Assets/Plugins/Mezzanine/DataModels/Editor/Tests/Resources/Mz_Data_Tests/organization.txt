@@ -1,0 +1,1 @@
+{"Name":"Big Brother","DevelopmentDepartment":{"Title":"Central Processing","Manager":{"Reviews":[3,4,3,5,2],"FirstName":"Stan","LastName":"The Man","Age":0}},"Departments":{"classType":"Mz.Models.ModelCollection`1[[ModelsTest.Department, Models.Test, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], Models, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"}}

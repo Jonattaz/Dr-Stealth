@@ -36,6 +36,18 @@ namespace SlimUI.ModernMenu{
 		[Tooltip("The UI Sub-Panel under KEY BINDINGS for GENERAL")]
 		public GameObject PanelGeneral;
 
+		public GameObject PanelCredits;
+		
+		public GameObject AssetsPanel;
+		
+		public GameObject SpecialThanksPanel;
+		public GameObject RAPanel;
+		public GameObject FunctionsPanel;
+		public GameObject functionButton;
+		public GameObject RAButton;
+		
+		
+
 		[Header("SFX")]
 		[Tooltip("The GameObject holding the Audio Source component for the HOVER SOUND")]
 		public AudioSource hoverSound;
@@ -136,7 +148,7 @@ namespace SlimUI.ModernMenu{
 		public void NewGame(){
 			if(sceneName != ""){
 				StartCoroutine(LoadAsynchronously(sceneName));
-				//SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+				SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
 			}
 		}
 
@@ -174,6 +186,11 @@ namespace SlimUI.ModernMenu{
 			PanelGame.SetActive(false);
 			PanelKeyBindings.SetActive(false);
 
+			PanelCredits.SetActive(false);
+			AssetsPanel.SetActive(false);
+			SpecialThanksPanel.SetActive(false);
+
+
 			lineGame.SetActive(false);
 			lineControls.SetActive(false);
 			lineVideo.SetActive(false);
@@ -193,9 +210,21 @@ namespace SlimUI.ModernMenu{
 			lineGame.SetActive(true);
 		}
 
+		public void PanelCredit(){
+			DisablePanels();
+			PanelCredits.SetActive(true);
+			lineGame.SetActive(true);
+		}
+
 		public void VideoPanel(){
 			DisablePanels();
 			PanelVideo.SetActive(true);
+			lineVideo.SetActive(true);
+		}
+
+		public void ThanksPanel(){
+			DisablePanels();
+			SpecialThanksPanel.SetActive(true);
 			lineVideo.SetActive(true);
 		}
 
@@ -206,11 +235,33 @@ namespace SlimUI.ModernMenu{
 			lineControls.SetActive(true);
 		}
 
+		
+		public void AssetPanel(){
+			DisablePanels();
+			AssetsPanel.SetActive(true);
+			//PanelMovement.SetActive(true);
+			lineControls.SetActive(true);
+		}
+
 		public void KeyBindingsPanel(){
 			DisablePanels();
 			MovementPanel();
 			PanelKeyBindings.SetActive(true);
 			lineKeyBindings.SetActive(true);
+		}
+
+		public void SwitchToRaPanel(){
+			FunctionsPanel.SetActive(false);
+			RAButton.SetActive(false);
+			functionButton.SetActive(true);
+			RAPanel.SetActive(true);
+		}
+
+		public void SwitchToFunctionsPanel(){
+			RAPanel.SetActive(false);
+			RAButton.SetActive(true);
+			FunctionsPanel.SetActive(true);
+			functionButton.SetActive(false);
 		}
 
 		public void MovementPanel(){
