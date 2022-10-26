@@ -38,7 +38,6 @@ namespace PudimdimGames{
 
             if(fillAmount >= 1){
                 Door.DoorInstance.canOpenGet = true;
-                Debug.Log("Foi");
             }
 
             GetComponent<Image>().fillAmount = fillAmount;

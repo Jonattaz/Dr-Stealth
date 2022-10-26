@@ -86,7 +86,7 @@ namespace PudimdimGames
         {
             Movement();
             StaceControl();
-            SceneController();
+
         }
 
         public bool RequestStanceChange(CharacterStance newStance){
@@ -262,9 +262,9 @@ namespace PudimdimGames
         }
 
   
-        private void SceneController(){
-           if(_inputs.LoadNewScene.PressedDown()){
-               MenuManager.MenuInstance.SceneLoad(0);
+        private void MenuController(){
+           if(_inputs.Menu.PressedDown()){
+               //Abrir o menu
            }
         }
 
