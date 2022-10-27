@@ -261,14 +261,6 @@ namespace PudimdimGames
             }
         }
 
-  
-        private void MenuController(){
-           if(_inputs.Menu.PressedDown()){
-               //Abrir o menu
-           }
-        }
-
-
         IEnumerator TrackTarget(){
             while(true){
                 playerPos = gameObject.transform.position;

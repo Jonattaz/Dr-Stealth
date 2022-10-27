@@ -32,9 +32,8 @@ namespace PudimdimGames
         public Input Crouching;
         public Input Proning;
         public Input Clap;
-        public Input Menu;
-
-        public int MoveAxisForwardRaw{
+ 
+       public int MoveAxisForwardRaw{
             get{
                 if(Forward.Pressed() && Backward.Pressed()){return 0;}
                 else if(Forward.Pressed()){return 1;}
