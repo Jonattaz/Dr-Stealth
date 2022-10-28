@@ -12,13 +12,8 @@ namespace PudimdimGames{
 
         [SerializeField] private string sceneName;
 
+        [SerializeField] private bool isPaused;
         [SerializeField] private KeyCode menuButton;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
 
         // Update is called once per frame
         void Update()
@@ -30,14 +25,16 @@ namespace PudimdimGames{
             if(UnityEngine.Input.GetKeyDown(menuButton)){
                 if(mainCam.activeInHierarchy){
                     // Ativar menu
-
+                    isPaused = false;
                     mainCam.SetActive(false);
                     menu.SetActive(true);
                 }else{
+                    isPaused = true;
                     // Desativar menu
                     menu.SetActive(false);
                     mainCam.SetActive(true);
                 }
+                PauseGame();
             }
         }
 
@@ -46,6 +43,16 @@ namespace PudimdimGames{
 				SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
 			}
 		}
+
+        private void PauseGame(){
+            if(isPaused){
+                Time.timeScale = 1;
+                isPaused = false;
+            }else{
+                Time.timeScale = 0;
+                isPaused = true;
+            }
+        }
 
     }
 
