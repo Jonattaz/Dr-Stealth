@@ -7,25 +7,31 @@ namespace PudimdimGames{
         
     public class Introduction : MonoBehaviour
     {
-        [SerializeField] private Transform pointA;
-        [SerializeField] private Transform pointB;
+        [SerializeField] private Transform[] pointA;
+        [SerializeField] private Transform[] pointB;
         [SerializeField] private string sceneName;
+        
+        [SerializeField] private float[] duration;
 
-        [SerializeField] private float duration = 5f;
+        [SerializeField] private GameObject[] texts;
+
+        [SerializeField] private int index;
+        [SerializeField] private int actualIndex;
         private float elapsedTime = 0;
         private float t;
 
-        // Update is called once per frame
-        void Update()
-        {
-            ScreenMove();
+        void Update(){
+            if(index == actualIndex)
+                ScreenMove();
         }
-        
-        public void ScreenMove(){
-            elapsedTime += Time.deltaTime;
-            t = elapsedTime / duration;
 
-            transform.position = Vector3.Lerp(pointB.position, pointA.position, t);
+        public void ScreenMove(){
+            if(texts[index].gameObject.activeInHierarchy){    
+                elapsedTime += Time.deltaTime;
+                t = elapsedTime / duration[index];
+
+                texts[index].transform.position = Vector3.Lerp(pointB[index].position, pointA[index].position, t);
+            }
         }
 
         public void NewGame(){
@@ -33,5 +39,15 @@ namespace PudimdimGames{
                 SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
             }
         }
+
+        public void nextText(){
+            texts[index].SetActive(false);
+            index++;
+            texts[index].SetActive(true);
+            elapsedTime = 0;
+            actualIndex = index;
+        }
+
+
     }
 }
