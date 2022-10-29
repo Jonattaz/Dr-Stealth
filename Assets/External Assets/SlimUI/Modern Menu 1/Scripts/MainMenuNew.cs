@@ -98,6 +98,7 @@ namespace SlimUI.ModernMenu{
 		public TMP_Text finishedLoadingText;
 
 		void Start(){
+			Time.timeScale = 1;
 			CameraObject = transform.GetComponent<Animator>();
 
 			playMenu.SetActive(false);

@@ -191,6 +191,8 @@ namespace PudimdimGames{
                     stateText = "You Got Caught";
                     nav.speed = idleSpeed;
                     caught = true;
+                    if(!CheatController.cheatInstance.getCheat)
+                        GameMenu.gameMenuInstance.getCaughtInfo = caught;
                }
             
         }

@@ -9,16 +9,31 @@ namespace PudimdimGames{
     {
         [SerializeField] private GameObject mainCam;
         [SerializeField] private GameObject menu;
+        [SerializeField] private GameObject deathMenu;
 
-        [SerializeField] private string sceneName;
+        [SerializeField] private string menuScene;
+        [SerializeField] private string reloadScene;
+        [HideInInspector] public bool getCaughtInfo;
+        [SerializeField] private bool setCaughtInfo; 
 
         [SerializeField] private bool isPaused;
         [SerializeField] private KeyCode menuButton;
+        public static GameMenu gameMenuInstance;
+
+        void Start(){
+            gameMenuInstance = this;
+            Time.timeScale = 1;
+        }
 
         // Update is called once per frame
         void Update()
         {
-            MenuActivator();   
+            if(setCaughtInfo){
+                PlayerDead();
+            }else{
+                MenuActivator();
+                setCaughtInfo = getCaughtInfo;
+            }  
         }
 
         private void MenuActivator(){
@@ -39,8 +54,9 @@ namespace PudimdimGames{
         }
 
     	public void LoadMenu(){
-			if(sceneName != ""){
-				SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+			if(menuScene != ""){
+                Time.timeScale = 1;
+				SceneManager.LoadScene(menuScene, LoadSceneMode.Single);
 			}
 		}
 
@@ -52,6 +68,19 @@ namespace PudimdimGames{
                 Time.timeScale = 0;
                 isPaused = true;
             }
+        }
+
+        public void ReloadGame(){
+            if(reloadScene != ""){
+				SceneManager.LoadScene(reloadScene, LoadSceneMode.Single);
+			}
+        }
+
+        public void PlayerDead(){
+            Time.timeScale = 0;
+            mainCam.SetActive(false);
+            menu.SetActive(false);
+            deathMenu.SetActive(true);
         }
 
     }
