@@ -22,8 +22,11 @@ namespace PudimdimGames{
         [SerializeField] private bool noiseMode;
         [SerializeField] private bool itemSound;
         
+        [SerializeField] private AudioClip clip;
+
         [HideInInspector] public Vector3 getItemPos;
         [HideInInspector] public bool getItemSound;
+
 
 
         [Header("Display Controls")]
@@ -127,6 +130,8 @@ namespace PudimdimGames{
             getItemSound = itemSound;
             if(noiseMode){
                 itemSound = true;
+                Papae.UnitySDK.Managers.AudioManager.Instance.PlaySFX(clip, 10f);
+                
             }
         }
 
