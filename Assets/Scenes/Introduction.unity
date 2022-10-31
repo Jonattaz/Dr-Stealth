@@ -497,9 +497,9 @@ MonoBehaviour:
   - {fileID: 1003038448}
   sceneName: Game_Scene
   duration:
-  - 30
-  - 30
-  - 30
+  - 60
+  - 60
+  - 60
   - 20
   texts:
   - {fileID: 1920995043}
@@ -685,7 +685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &375440168
 Transform:
   m_ObjectHideFlags: 0
@@ -2911,4 +2911,4 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0

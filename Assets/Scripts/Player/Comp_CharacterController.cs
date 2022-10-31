@@ -7,6 +7,7 @@ namespace PudimdimGames
     public enum CharacterStance{Standing, Crouching, Proning}
     public class Comp_CharacterController : MonoBehaviour
     {
+        //public GameObject saveconfirm;
 
         public static Vector3 playerPos;
 
@@ -267,6 +268,16 @@ namespace PudimdimGames
                 yield return null;
             }
         }
+
+       /* void OnTriggerEnter(Collider other){
+            if(other.gameObject.CompareTag("SavePoint")){
+                SaveAndLoadManager.SLInstance.getPlayerPosition = playerPos;
+                SaveAndLoadManager.SLInstance.Save();
+                saveconfirm.SetActive(true);
+                
+
+            }
+        }*/
 
     }
 }
