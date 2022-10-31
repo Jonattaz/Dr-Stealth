@@ -18,5 +18,5 @@ MonoBehaviour:
   - character: {fileID: 11400000, guid: 28eefbffd081ce5408fbc822477e7f5e, type: 2}
     text: Frank estou aqui para te ajudar a fugir.
   - character: {fileID: 11400000, guid: 28eefbffd081ce5408fbc822477e7f5e, type: 2}
-    text: "Use est\xE1 tubula\xE7\xE3o atr\xE1s de mim para escapar. N\xE3o se preocupe
-      comigo, irei inventar uma desculpa de como conseguiu escapar."
+    text: "Use est\xE1 tubula\xE7\xE3o que se encontra a sua direita para escapar.
+      N\xE3o se preocupe comigo, irei inventar uma desculpa de como conseguiu escapar."
