@@ -32,6 +32,9 @@ namespace ArthemyDevelopment.Save
                         asset = ScriptableObject.CreateInstance<SaveDataPreferences>();
                         string path = "Assets/Resources/ArthemyDevelopment/SaveTool/SaveDataPreferences.asset";
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
+                       
+                       // Testar adicionar o namespace UnityEngine antes de chamar a função
+                       
                        // AssetDatabase.CreateAsset(asset, path);
                        // AssetDatabase.SaveAssets();
                        // AssetDatabase.Refresh();
