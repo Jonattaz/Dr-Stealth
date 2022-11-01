@@ -32,9 +32,9 @@ namespace ArthemyDevelopment.Save
                         asset = ScriptableObject.CreateInstance<SaveDataPreferences>();
                         string path = "Assets/Resources/ArthemyDevelopment/SaveTool/SaveDataPreferences.asset";
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
-                        AssetDatabase.CreateAsset(asset, path);
-                        AssetDatabase.SaveAssets();
-                        AssetDatabase.Refresh();
+                       // AssetDatabase.CreateAsset(asset, path);
+                       // AssetDatabase.SaveAssets();
+                       // AssetDatabase.Refresh();
                     }
                     _current = asset;
                 }
