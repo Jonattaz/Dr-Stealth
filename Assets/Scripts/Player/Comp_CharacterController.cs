@@ -87,6 +87,7 @@ namespace PudimdimGames
         {
             Movement();
             StaceControl();
+            LoadTest();
 
         }
 
@@ -269,15 +270,50 @@ namespace PudimdimGames
             }
         }
 
-       /* void OnTriggerEnter(Collider other){
+        void OnTriggerEnter(Collider other){
             if(other.gameObject.CompareTag("SavePoint")){
-                SaveAndLoadManager.SLInstance.getPlayerPosition = playerPos;
-                SaveAndLoadManager.SLInstance.Save();
-                saveconfirm.SetActive(true);
-                
+                // Script.Method(name, value) - Estrutura da linha
+                BlazeSave.SaveData("PlayerPosX", gameObject.transform.position.x);
+                BlazeSave.SaveData("PlayerPosY", gameObject.transform.position.y);
+                BlazeSave.SaveData("PlayerPosZ", gameObject.transform.position.z);
+        
+                Debug.Log("Salvou yeah");
 
             }
-        }*/
+        }
+
+        /*
+            ---- SALVAR A POSIÇÃO ----
+
+            Funcionou --- Pegar os valores de x,y e z do vetor que representa a posição do jogador(playerpos)
+                            BlazeSave.SaveData("PlayerX", transform.position.x)
+            Funcionou --- Salvar cada valor numa variavel de save
+
+            Funcionou --- Carregar cada valor usando o método load
+            Funcionou --- Atribuir x,y e z para sua respectiva posição no player atual
+
+            ----  FAZER O LOAD DE FORMA AUTOMATICA AO CLICAR EM CARREGAR ----
+            Clicar em carregar
+                Inicia o level
+                    Quando isso acontece ao começar ele da load em todas as informações
+                    Bool que controla se tem algum save ou não
+                        Sim - pode clicar em carregar
+                        Não - não 
+
+
+        */
+
+
+        public void LoadTest(){
+            if(UnityEngine.Input.GetKeyDown(KeyCode.L)){    
+                // Type name = Script.Method<Type>(SaveName) - Estrutura da linha
+                float xvalue = BlazeSave.LoadData<float>("PlayerPosX");
+                float yvalue = BlazeSave.LoadData<float>("PlayerPosY");
+                float zvalue = BlazeSave.LoadData<float>("PlayerPosZ");
+                gameObject.transform.position = new Vector3(xvalue, yvalue, zvalue);
+                
+            }
+        }
 
     }
 }
