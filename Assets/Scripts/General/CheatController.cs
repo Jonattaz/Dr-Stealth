@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CheatController : MonoBehaviour
 {
@@ -9,29 +10,26 @@ public class CheatController : MonoBehaviour
     [HideInInspector] public bool getCheat;
     [SerializeField] private GameObject cheatLine;
     [SerializeField] private GameObject normalLine;
-    [SerializeField] private bool created;
+    private bool created;
+     public bool canLoad;
 
-    void Awake ()
-    {
-        if (!created)
-        {
-            DontDestroyOnLoad(this.gameObject);
-            created = true;
+    void Awake (){
+        DontDestroyOnLoad (this);
+            
+        if (cheatInstance == null) {
+            cheatInstance = this;
+        }else {
+            Destroy(gameObject);
         }
-        
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-
-    // Start is called before the first frame update
-    void Start(){
-        cheatInstance = this;
         
     }
 
-    
+
+    void Update(){
+        normalLine = GameObject.Find("Game_Menu/Menu/Canv_Settings/PANELS/PanelGame/NormalLine");
+        cheatLine = GameObject.Find("Game_Menu/Menu/Canv_Settings/PANELS/PanelGame/CheatLine");        
+    }
+
     public void CheatOn(){
         setCheat = true;
         getCheat = setCheat;

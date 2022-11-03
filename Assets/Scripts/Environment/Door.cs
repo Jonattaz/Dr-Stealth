@@ -19,26 +19,12 @@ namespace PudimdimGames{
 
          bool buttonStatus;
 
-        public static Door DoorInstance;
         bool buttonMessage;
         
-        
-        void OnGUI()
-        {
-            if (buttonMessage && !canOpen){
-                QTE.SetActive(true);
-            }else{
-                QTE.SetActive(false);
-            }
-        }
-        
-
         // Start is called before the first frame update
         void Start()
         {
-            DoorInstance = this;
-            swivelAnnimation = swivelAxis.GetComponent<Animator>();
-    
+           swivelAnnimation = swivelAxis.GetComponent<Animator>();    
         }
 
         // Update is called once per frame
@@ -50,12 +36,19 @@ namespace PudimdimGames{
 
         void OnTriggerEnter(Collider other)
         {
+            if(!canOpenGet)
+                QTE.SetActive(true);
+            else{
+                QTE.SetActive(false);
+            }
+            
             canOpen = canOpenGet;
+            
             buttonMessage = true;
             CountDownTimer.TimerInstance.canCount = true;
 
-            if (UnityEngine.Input.GetKey("e") && canOpen)
-            {
+            
+            if (UnityEngine.Input.GetKey("e") && canOpen ){
                 swivelAnnimation.SetBool("buttonDown", true);
             }
     
@@ -66,9 +59,9 @@ namespace PudimdimGames{
         {
             if(!CountDownTimer.TimerInstance.noise){
                 canOpen = canOpenGet;
+                
                 buttonMessage = true;
-                if (UnityEngine.Input.GetKey("e") && canOpen)
-                {
+                if (UnityEngine.Input.GetKey("e") && canOpen){
                     swivelAnnimation.SetBool("buttonDown", true);
                 }
             }
@@ -77,6 +70,7 @@ namespace PudimdimGames{
 
         void OnTriggerExit(Collider other)
         {
+            QTE.SetActive(false);
             CountDownTimer.TimerInstance.canCount = false;
             CountDownTimer.TimerInstance.restart = true;
             CountDownTimer.TimerInstance.noise = false;

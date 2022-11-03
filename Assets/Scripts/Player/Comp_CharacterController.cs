@@ -10,6 +10,8 @@ namespace PudimdimGames
         //public GameObject saveconfirm;
 
         public static Vector3 playerPos;
+        [SerializeField] private GameObject[] doors;
+        [SerializeField] private int index;
 
         [Header("Speed (Normal, Sprinting)")]
         [SerializeField] private Vector2 _standingSpeed = new Vector2(0,0);
@@ -58,6 +60,9 @@ namespace PudimdimGames
         // Start is called before the first frame update
         void Start()
         {
+            if(CheatController.cheatInstance.canLoad)
+                LoadGame(); 
+
             _animator = GetComponent<Animator>();
             _collider = GetComponent<CapsuleCollider>();
             _inputs = GetComponent<Comp_PlayerInputs>(); 
@@ -85,10 +90,10 @@ namespace PudimdimGames
         // Update is called once per frame
         void Update()
         {
+
             Movement();
             StaceControl();
-            LoadTest();
-
+       
         }
 
         public bool RequestStanceChange(CharacterStance newStance){
@@ -276,43 +281,31 @@ namespace PudimdimGames
                 BlazeSave.SaveData("PlayerPosX", gameObject.transform.position.x);
                 BlazeSave.SaveData("PlayerPosY", gameObject.transform.position.y);
                 BlazeSave.SaveData("PlayerPosZ", gameObject.transform.position.z);
-        
+              
+                for (index = 0; index < doors.Length; index++){
+                    BlazeSave.SaveData("CanOpenDoor " + index, doors[index].GetComponent<Door>().canOpenGet);
+
+                }
+
+                CheatController.cheatInstance.canLoad = true;
                 Debug.Log("Salvou yeah");
 
             }
         }
 
-        /*
-            ---- SALVAR A POSIÇÃO ----
 
-            Funcionou --- Pegar os valores de x,y e z do vetor que representa a posição do jogador(playerpos)
-                            BlazeSave.SaveData("PlayerX", transform.position.x)
-            Funcionou --- Salvar cada valor numa variavel de save
-
-            Funcionou --- Carregar cada valor usando o método load
-            Funcionou --- Atribuir x,y e z para sua respectiva posição no player atual
-
-            ----  FAZER O LOAD DE FORMA AUTOMATICA AO CLICAR EM CARREGAR ----
-            Clicar em carregar
-                Inicia o level
-                    Quando isso acontece ao começar ele da load em todas as informações
-                    Bool que controla se tem algum save ou não
-                        Sim - pode clicar em carregar
-                        Não - não 
-
-
-        */
-
-
-        public void LoadTest(){
-            if(UnityEngine.Input.GetKeyDown(KeyCode.L)){    
-                // Type name = Script.Method<Type>(SaveName) - Estrutura da linha
+        public void LoadGame(){   
                 float xvalue = BlazeSave.LoadData<float>("PlayerPosX");
                 float yvalue = BlazeSave.LoadData<float>("PlayerPosY");
                 float zvalue = BlazeSave.LoadData<float>("PlayerPosZ");
+                
+                for (index = 0; index < doors.Length; index++){
+                    doors[index].GetComponent<Door>().canOpenGet = 
+                        BlazeSave.LoadData<bool>("CanOpenDoor " + index);
+                }
+
                 gameObject.transform.position = new Vector3(xvalue, yvalue, zvalue);
                 
-            }
         }
 
     }

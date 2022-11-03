@@ -153,6 +153,15 @@ namespace SlimUI.ModernMenu{
 			}
 		}
 
+		
+		public void LoadGame(){
+			if(sceneName != "" && CheatController.cheatInstance.canLoad){
+				StartCoroutine(LoadAsynchronously(sceneName));
+				SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+			}
+		}
+
+
 		public void  DisablePlayCampaign(){
 			playMenu.SetActive(false);
 		}
@@ -337,7 +346,7 @@ namespace SlimUI.ModernMenu{
 				loadBar.value = progress;
 
 				if(operation.progress >= 0.9f){
-					finishedLoadingText.gameObject.SetActive(true);
+					//finishedLoadingText.gameObject.SetActive(true);
 
 					if(Input.anyKeyDown){
 						operation.allowSceneActivation = true;
