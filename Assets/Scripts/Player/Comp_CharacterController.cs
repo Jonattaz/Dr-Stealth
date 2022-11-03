@@ -60,8 +60,9 @@ namespace PudimdimGames
         // Start is called before the first frame update
         void Start()
         {
-            if(CheatController.cheatInstance.canLoad)
-                LoadGame(); 
+            if(CheatController.cheatInstance != null)    
+                if(CheatController.cheatInstance.canLoad)
+                    LoadGame(); 
 
             _animator = GetComponent<Animator>();
             _collider = GetComponent<CapsuleCollider>();

@@ -68,6 +68,10 @@ namespace PudimdimGames{
                 DrawProjection();
             }            
 
+            if(pickUpDistance <= 2 && itemIsPicked && forceMulti <= 10){
+                this.transform.position = pickUpPoint.position;
+            }
+
             pickUpDistance = Vector3.Distance(player.position, transform.position);
 
             if(pickUpDistance <= 2){

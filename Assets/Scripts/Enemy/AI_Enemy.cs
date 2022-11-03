@@ -167,12 +167,15 @@ namespace PudimdimGames{
                 transform.LookAt(LookAtPos);
                 nav.speed = normalSpeed;
                 nav.SetDestination(moveSpots[randomSpot].position);
+                
+                
                 if(Vector3.Distance(transform.position, moveSpots[randomSpot].position) < 2.0f){
                     if(waitTime <= 0){
+                        nav.speed = normalSpeed;
                         randomSpot = Random.Range(0, moveSpots.Length);
-
                         waitTime = startWaitTime;
                     }else{
+                        nav.speed = idleSpeed;
                         waitTime -= Time.deltaTime; 
                     }
                 }
