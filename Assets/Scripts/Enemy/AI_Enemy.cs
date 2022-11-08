@@ -101,13 +101,29 @@ namespace PudimdimGames{
 
         void NoiseCheck(){
             if(distance <= noiseTravelDistance){
-                if(PickUpItem.pickUpInstance.getItemSound){
-                    aiHeardPlayer = true;
-                    stateText = "Enemy Heard a Noise";
-                    Debug.Log("Enemy Heard a Noise");
-                    noisePosition = PickUpItem.pickUpInstance.getItemPos;
+                if(CountDownTimer.TimerInstance == null){
+                    if(PickUpItem.pickUpInstance.getItemSound){
+                        aiHeardPlayer = true;
+                        stateText = "Enemy Heard a Noise";
+                        Debug.Log("Enemy Heard a Noise");
+    
+                        noisePosition = PickUpItem.pickUpInstance.getItemPos;
+                    }else{
+                        aiHeardPlayer = false;
+                    }
                 }else{
-                    aiHeardPlayer = false;
+                    if(PickUpItem.pickUpInstance.getItemSound || CountDownTimer.TimerInstance.noise){
+                        aiHeardPlayer = true;
+                        stateText = "Enemy Heard a Noise";
+                        Debug.Log("Enemy Heard a Noise");
+                    if(CountDownTimer.TimerInstance.noise){
+                        noisePosition = CountDownTimer.TimerInstance.getObjPos;
+                    }else{
+                        noisePosition = PickUpItem.pickUpInstance.getItemPos;
+                    }         
+                    }else{
+                        aiHeardPlayer = false;
+                    }
                 }
             }
         }

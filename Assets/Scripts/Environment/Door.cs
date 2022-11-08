@@ -6,10 +6,9 @@ namespace PudimdimGames{
 
     public class Door: MonoBehaviour
     {
-
         public GameObject swivelAxis;
 
-        [SerializeField] public GameObject QTE;
+        public GameObject QTE;
 
         [SerializeField] bool canOpen;
         
@@ -17,9 +16,6 @@ namespace PudimdimGames{
 
         Animator swivelAnnimation;
 
-         bool buttonStatus;
-
-        bool buttonMessage;
         
         // Start is called before the first frame update
         void Start()
@@ -27,24 +23,18 @@ namespace PudimdimGames{
            swivelAnnimation = swivelAxis.GetComponent<Animator>();    
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-
         void OnTriggerEnter(Collider other)
         {
             if(!canOpenGet)
                 QTE.SetActive(true);
             else{
                 QTE.SetActive(false);
+                CountDownTimer.TimerInstance.canCount = false;
+                CountDownTimer.TimerInstance.restart = true;
+                CountDownTimer.TimerInstance.noise = false;
             }
             
             canOpen = canOpenGet;
-            
-            buttonMessage = true;
             CountDownTimer.TimerInstance.canCount = true;
 
             
@@ -60,7 +50,6 @@ namespace PudimdimGames{
             if(!CountDownTimer.TimerInstance.noise){
                 canOpen = canOpenGet;
                 
-                buttonMessage = true;
                 if (UnityEngine.Input.GetKey("e") && canOpen){
                     swivelAnnimation.SetBool("buttonDown", true);
                 }
@@ -76,7 +65,6 @@ namespace PudimdimGames{
             CountDownTimer.TimerInstance.noise = false;
             canOpen = canOpenGet;
             swivelAnnimation.SetBool("buttonDown", false);
-            buttonMessage = false;
             swivelAnnimation.SetBool("buttonDown", false);
         }
 

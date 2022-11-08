@@ -9,8 +9,11 @@ namespace PudimdimGames{
         [SerializeField] private float fillAmount = 0;
         [SerializeField] private float fillValue;
         private float timeThreshold = 0;
-         [SerializeField] private GameObject door;
+        [SerializeField] private GameObject door;
 
+        [SerializeField] private GameObject tubulacao;
+        
+        [SerializeField] private bool isDoor;
 
         [SerializeField] private float fillHold;
          
@@ -39,7 +42,11 @@ namespace PudimdimGames{
             }
 
             if(fillAmount >= 1){
-               door.GetComponent<Door>().canOpenGet = true;
+                if(isDoor){
+                    door.GetComponent<Door>().canOpenGet = true;
+                }else{
+                    tubulacao.GetComponent<Teleporting>().canTeleport = true;
+                }
             }
 
             GetComponent<Image>().fillAmount = fillAmount;

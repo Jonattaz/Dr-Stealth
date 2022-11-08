@@ -27,8 +27,6 @@ namespace PudimdimGames{
         [HideInInspector] public Vector3 getItemPos;
         [HideInInspector] public bool getItemSound;
 
-
-
         [Header("Display Controls")]
         [Range(10, 100)]
         [SerializeField] private int linePoints = 25;
