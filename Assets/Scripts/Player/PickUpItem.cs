@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Papae.UnitySDK.Managers;
+
 
 namespace PudimdimGames{
 
@@ -8,6 +10,7 @@ namespace PudimdimGames{
     {
         private Transform pickUpPoint;
         private Transform player;
+        [SerializeField] AudioClip itemNoise;
         private Rigidbody rb;
         public static PickUpItem pickUpInstance;
         private Vector3 itemPos;
@@ -22,8 +25,6 @@ namespace PudimdimGames{
         [SerializeField] private bool noiseMode;
         [SerializeField] private bool itemSound;
         
-        [SerializeField] private AudioClip clip;
-
         [HideInInspector] public Vector3 getItemPos;
         [HideInInspector] public bool getItemSound;
 
@@ -132,7 +133,7 @@ namespace PudimdimGames{
             getItemSound = itemSound;
             if(noiseMode){
                 itemSound = true;
-                Papae.UnitySDK.Managers.AudioManager.Instance.PlaySFX(clip, 10f);
+                Papae.UnitySDK.Managers.AudioManager.Instance.PlaySFX(itemNoise, 1f);
                 
             }
         }

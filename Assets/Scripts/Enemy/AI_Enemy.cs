@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using Papae.UnitySDK.Managers;
+
 
 namespace PudimdimGames{
 
@@ -18,6 +20,11 @@ namespace PudimdimGames{
         [SerializeField] private bool playerIsInLOS = false;
         [SerializeField] private float fieldOfViewAngle;
         [SerializeField] private float losRadius;
+
+        [SerializeField] private AudioClip foundPlayerSound;
+        [SerializeField] private AudioClip lostPlayerSound;
+        [SerializeField] private AudioClip heardNoiseSound;
+        [SerializeField] private AudioClip idleSound;
 
         // AI sight and Memory
         [SerializeField]private bool aiMemorizesPlayer = false;
@@ -74,10 +81,13 @@ namespace PudimdimGames{
         void Update(){
             distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
             anim.SetFloat("Speed", nav.speed);
+            
+            if(nav.speed == idleSpeed)
+                AudioManager.Instance.PlaySFX(idleSound, 10f);
 
-           if(!caught){
-               
 
+            if(!caught){
+                               
                 if(nav.isActiveAndEnabled){
                     CheckLOS();
                     if(playerIsInLOS == false && aiMemorizesPlayer == false && aiHeardPlayer == false){
@@ -96,17 +106,19 @@ namespace PudimdimGames{
                         StartCoroutine(AiMemory());
                     }
                 }
-           }
+            }
         }
 
         void NoiseCheck(){
             if(distance <= noiseTravelDistance){
+                
+                AudioManager.Instance.PlaySFX(heardNoiseSound, 0.5f);
                 if(CountDownTimer.TimerInstance == null){
                     if(PickUpItem.pickUpInstance.getItemSound){
                         aiHeardPlayer = true;
                         stateText = "Enemy Heard a Noise";
                         Debug.Log("Enemy Heard a Noise");
-    
+
                         noisePosition = PickUpItem.pickUpInstance.getItemPos;
                     }else{
                         aiHeardPlayer = false;
@@ -178,6 +190,7 @@ namespace PudimdimGames{
 
         void Patrol(){
             if(move){    
+                AudioManager.Instance.PlaySFX(lostPlayerSound, 10f);
                 stateText = "Patrol Mode";
                 Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
                 transform.LookAt(LookAtPos);
@@ -196,12 +209,14 @@ namespace PudimdimGames{
                     }
                 }
             }else{
+                
                 nav.speed = idleSpeed;
             }
         }
 
         void ChasePlayer(){            
                if(distance > distToPlayer){ 
+                    AudioManager.Instance.PlaySFX(foundPlayerSound, 10f);
                     stateText = "Chase Mode";
                     nav.speed = normalSpeed;
                     transform.LookAt(Comp_CharacterController.playerPos);

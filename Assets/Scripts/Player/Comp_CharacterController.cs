@@ -1,16 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Papae.UnitySDK.Managers;
+
 
 namespace PudimdimGames
 {
     public enum CharacterStance{Standing, Crouching, Proning}
     public class Comp_CharacterController : MonoBehaviour
     {
-        //public GameObject saveconfirm;
+        [Header("Sounds")]
+        [SerializeField] private AudioClip prisaoSound;
+        [SerializeField] private AudioClip centralComandoSound;
+        [SerializeField] private AudioClip salaFinalSound;
+        [SerializeField] private AudioClip opEspeciaisSound;
+        [SerializeField] private AudioClip salaTesteNuclearSound;
+        [SerializeField] private AudioClip runSound;
+        [SerializeField] private AudioClip breathSound;
 
         public static Vector3 playerPos;
         [SerializeField] private GameObject[] doors;
+        [SerializeField] private GameObject[] vents;
         [SerializeField] private int index;
 
         [Header("Speed (Normal, Sprinting)")]
@@ -223,12 +233,17 @@ namespace PudimdimGames
                 return;
             }
 
+
             // Input Handle
             Vector3 _moveInputVector = new Vector3(_inputs.MoveAxisRightRaw, 0, _inputs.MoveAxisForwardRaw).normalized;
             
             // Move Speed
-            if(_inputs.Sprint.Pressed()){ _targetSpeed = _moveInputVector != Vector3.zero ? _sprintSpeed : 0; }
-            else                        {  _targetSpeed = _moveInputVector != Vector3.zero ? _runSpeed : 0; }
+            if(_inputs.Sprint.Pressed()){ 
+                _targetSpeed = _moveInputVector != Vector3.zero ? _sprintSpeed : 0;
+            }
+            else{ 
+                _targetSpeed = _moveInputVector != Vector3.zero ? _runSpeed : 0;
+            }
             _newSpeed = Mathf.Lerp(_newSpeed, _targetSpeed, Time.deltaTime * _moveSharpness);
             
             // Velocity
@@ -282,16 +297,39 @@ namespace PudimdimGames
                 BlazeSave.SaveData("PlayerPosX", gameObject.transform.position.x);
                 BlazeSave.SaveData("PlayerPosY", gameObject.transform.position.y);
                 BlazeSave.SaveData("PlayerPosZ", gameObject.transform.position.z);
-              
                 for (index = 0; index < doors.Length; index++){
-                    BlazeSave.SaveData("CanOpenDoor " + index, doors[index].GetComponent<Door>().canOpenGet);
-
+                    BlazeSave.SaveData("CanOpenDoor" + index, doors[index].GetComponent<Door>().canOpenGet);
+                }
+                
+                for (index = 0; index < vents.Length; index++){
+                    BlazeSave.SaveData("CanOpenVent" + index, 
+                        vents[index].GetComponent<Teleporting>().canTeleport);
                 }
 
+                
                 CheatController.cheatInstance.canLoad = true;
                 Debug.Log("Salvou yeah");
+            }
+
+            if(other.gameObject.CompareTag("Prisão")){
+                AudioManager.Instance.PlayBGM(prisaoSound, MusicTransition.LinearFade, 4f);
+
+            }else if(other.gameObject.CompareTag("CentralComando")){
+                AudioManager.Instance.PlayBGM(centralComandoSound, MusicTransition.LinearFade, 4f);
+
+            }else if(other.gameObject.CompareTag("SalaFinal")){
+                AudioManager.Instance.PlayBGM(salaFinalSound, MusicTransition.LinearFade, 4f);
+
+            }else if(other.gameObject.CompareTag("OpEspeciais")){
+                AudioManager.Instance.PlayBGM(opEspeciaisSound, MusicTransition.LinearFade, 4f);
+
+            }else if(other.gameObject.CompareTag("TestesNucleares")){
+                AudioManager.Instance.PlayBGM(salaTesteNuclearSound, MusicTransition.LinearFade, 4f);
 
             }
+
+
+
         }
 
 
@@ -302,8 +340,13 @@ namespace PudimdimGames
                 
                 for (index = 0; index < doors.Length; index++){
                     doors[index].GetComponent<Door>().canOpenGet = 
-                        BlazeSave.LoadData<bool>("CanOpenDoor " + index);
-                }
+                        BlazeSave.LoadData<bool>("CanOpenDoor" + index);
+                } 
+                 
+                for (index = 0; index < vents.Length; index++){
+                    vents[index].GetComponent<Teleporting>().canTeleport = 
+                        BlazeSave.LoadData<bool>("CanOpenVent" + index);
+                }   
 
                 gameObject.transform.position = new Vector3(xvalue, yvalue, zvalue);
                 

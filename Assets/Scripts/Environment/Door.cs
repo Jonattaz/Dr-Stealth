@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Papae.UnitySDK.Managers;
+
 
 namespace PudimdimGames{
 
@@ -10,11 +12,13 @@ namespace PudimdimGames{
 
         public GameObject QTE;
 
-        [SerializeField] bool canOpen;
+        [SerializeField] private AudioClip doorSound;
+
+        [SerializeField] private bool canOpen;
         
         public bool canOpenGet;
 
-        Animator swivelAnnimation;
+        private Animator swivelAnnimation;
 
         
         // Start is called before the first frame update
@@ -40,6 +44,7 @@ namespace PudimdimGames{
             
             if (UnityEngine.Input.GetKey("e") && canOpen ){
                 swivelAnnimation.SetBool("buttonDown", true);
+                AudioManager.Instance.PlaySFX(doorSound, 1f);
             }
     
         }
@@ -52,6 +57,7 @@ namespace PudimdimGames{
                 
                 if (UnityEngine.Input.GetKey("e") && canOpen){
                     swivelAnnimation.SetBool("buttonDown", true);
+                    AudioManager.Instance.PlaySFX(doorSound, 10f);
                 }
             }
         }
