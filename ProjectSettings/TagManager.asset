@@ -12,6 +12,8 @@ TagManager:
   - SalaFinal
   - OpEspeciais
   - TestesNucleares
+  - PrecisaChave
+  - Chave
   layers:
   - Default
   - TransparentFX

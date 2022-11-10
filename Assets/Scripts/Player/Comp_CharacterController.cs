@@ -9,6 +9,11 @@ namespace PudimdimGames
     public enum CharacterStance{Standing, Crouching, Proning}
     public class Comp_CharacterController : MonoBehaviour
     {
+        [Header("Doors")]
+        [SerializeField] private GameObject[] doors;
+       
+          
+
         [Header("Sounds")]
         [SerializeField] private AudioClip prisaoSound;
         [SerializeField] private AudioClip centralComandoSound;
@@ -19,7 +24,6 @@ namespace PudimdimGames
         [SerializeField] private AudioClip breathSound;
 
         public static Vector3 playerPos;
-        [SerializeField] private GameObject[] doors;
         [SerializeField] private GameObject[] vents;
         [SerializeField] private int index;
 

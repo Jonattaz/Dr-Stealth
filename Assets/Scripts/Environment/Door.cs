@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Papae.UnitySDK.Managers;
 
-
 namespace PudimdimGames{
 
     public class Door: MonoBehaviour
@@ -15,8 +14,15 @@ namespace PudimdimGames{
         [SerializeField] private AudioClip doorSound;
 
         [SerializeField] private bool canOpen;
+        [SerializeField] private bool makeDoorSound;
+
+        [SerializeField] private GameObject needKeyText;        
         
         public bool canOpenGet;
+
+        public bool key;
+
+        public bool needKey;
 
         private Animator swivelAnnimation;
 
@@ -24,27 +30,36 @@ namespace PudimdimGames{
         // Start is called before the first frame update
         void Start()
         {
-           swivelAnnimation = swivelAxis.GetComponent<Animator>();    
+           swivelAnnimation = swivelAxis.GetComponent<Animator>();   
         }
 
         void OnTriggerEnter(Collider other)
-        {
-            if(!canOpenGet)
-                QTE.SetActive(true);
-            else{
-                QTE.SetActive(false);
-                CountDownTimer.TimerInstance.canCount = false;
-                CountDownTimer.TimerInstance.restart = true;
-                CountDownTimer.TimerInstance.noise = false;
+        {   
+            if(!needKey){
+                if(!canOpenGet )
+                    QTE.SetActive(true);
+                else{
+                    QTE.SetActive(false);
+                    CountDownTimer.TimerInstance.canCount = false;
+                    CountDownTimer.TimerInstance.restart = true;
+                    CountDownTimer.TimerInstance.noise = false;
+                }
+                
+                canOpen = canOpenGet;
+                CountDownTimer.TimerInstance.canCount = true;
             }
-            
-            canOpen = canOpenGet;
-            CountDownTimer.TimerInstance.canCount = true;
-
             
             if (UnityEngine.Input.GetKey("e") && canOpen ){
                 swivelAnnimation.SetBool("buttonDown", true);
-                AudioManager.Instance.PlaySFX(doorSound, 1f);
+            }
+
+            
+            if(key){
+                canOpenGet = true;
+            }else{                
+                if(other.gameObject.CompareTag("Player")){
+                    needKeyText.SetActive(true);
+                }
             }
     
         }
@@ -57,9 +72,9 @@ namespace PudimdimGames{
                 
                 if (UnityEngine.Input.GetKey("e") && canOpen){
                     swivelAnnimation.SetBool("buttonDown", true);
-                    AudioManager.Instance.PlaySFX(doorSound, 10f);
                 }
             }
+            
         }
 
 
@@ -72,6 +87,10 @@ namespace PudimdimGames{
             canOpen = canOpenGet;
             swivelAnnimation.SetBool("buttonDown", false);
             swivelAnnimation.SetBool("buttonDown", false);
+            if(other.gameObject.CompareTag("Player")){
+                needKeyText.SetActive(false);
+            }        
+
         }
 
     }
