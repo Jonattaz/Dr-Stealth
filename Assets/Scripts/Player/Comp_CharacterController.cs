@@ -105,7 +105,6 @@ namespace PudimdimGames
         // Update is called once per frame
         void Update()
         {
-
             Movement();
             StaceControl();
        

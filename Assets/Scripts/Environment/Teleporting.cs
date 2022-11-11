@@ -15,11 +15,7 @@ namespace PudimdimGames{
 
         void OnTriggerEnter(Collider other){
              
-            if(canTeleport){
-                StartCoroutine(Teleport());
-                CameraFade.FadeInstance.Fade();
-                player.GetComponent<Comp_CharacterController>().enabled = false;
-            }
+            
 
             if(!canTeleport && hasQTE){
                 QTE.SetActive(true);
@@ -32,6 +28,14 @@ namespace PudimdimGames{
             }
         }
 
+       void OnTriggerStay(Collider other){
+            if(canTeleport){
+                StartCoroutine(Teleport());
+                CameraFade.FadeInstance.Fade();
+                player.GetComponent<Comp_CharacterController>().enabled = false;
+            }
+
+        }
    
          /// <summary>
          /// OnTriggerExit is called when the Collider other has stopped touching the trigger.
@@ -46,15 +50,14 @@ namespace PudimdimGames{
 
         IEnumerator Teleport(){
             yield return new WaitForSeconds(1);
-            // Deixar tela escura e pausa o jogo
             player.transform.position = new Vector3(
                 teleportTarget.transform.position.x,
                 teleportTarget.transform.position.y,
                 teleportTarget.transform.position.z
             );
-            CameraFade.FadeInstance.Fade();
             player.GetComponent<Comp_CharacterController>().enabled = true;
+            
         }
-
+        
     }
 }

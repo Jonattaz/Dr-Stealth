@@ -8,8 +8,8 @@ namespace PudimdimGames{
 
     public class PickUpItem : MonoBehaviour
     {
-        private Transform pickUpPoint;
-        private Transform player;
+        [SerializeField] private Transform pickUpPoint;
+        [SerializeField] private Transform player;
         [SerializeField] AudioClip itemNoise;
         private Rigidbody rb;
         public static PickUpItem pickUpInstance;
@@ -52,14 +52,15 @@ namespace PudimdimGames{
             StartCoroutine(TrackTarget());
 
             rb = GetComponent<Rigidbody>();
-            player = UnityEngine.GameObject.Find("Player").transform;
-            pickUpPoint = UnityEngine.GameObject.Find("PickUpPoint").transform;
         }
 
         // Update is called once per frame
         void Update(){
 
             if(UnityEngine.Input.GetKey(KeyCode.F) && itemIsPicked == true && readyToThrow){
+                this.transform.position = pickUpPoint.position;
+                this.transform.parent = pickUpPoint.transform;
+                
                 if(forceMulti <= 1000){
                     forceMulti += 300 * Time.deltaTime;
                 }
@@ -78,7 +79,7 @@ namespace PudimdimGames{
                     GetComponent<Rigidbody>().useGravity = false;
                     GetComponent<BoxCollider>().enabled = false;
                     this.transform.position = pickUpPoint.position;
-                    this.transform.parent = GameObject.Find("PickUpPoint").transform;
+                    this.transform.parent = pickUpPoint.transform;
 
                     itemIsPicked = true;
                     forceMulti = 0;
