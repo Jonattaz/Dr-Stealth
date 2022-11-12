@@ -21,11 +21,6 @@ namespace PudimdimGames{
         [SerializeField] private float fieldOfViewAngle;
         [SerializeField] private float losRadius;
 
-        [SerializeField] private AudioClip foundPlayerSound;
-        [SerializeField] private AudioClip lostPlayerSound;
-        [SerializeField] private AudioClip heardNoiseSound;
-        [SerializeField] private AudioClip idleSound;
-
         // AI sight and Memory
         [SerializeField]private bool aiMemorizesPlayer = false;
         [SerializeField] private float memoryStartTime;
@@ -82,10 +77,7 @@ namespace PudimdimGames{
             distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
             anim.SetFloat("Speed", nav.speed);
             
-            if(nav.speed == idleSpeed)
-                AudioManager.Instance.PlaySFX(idleSound, 10f);
-
-
+         
             if(!caught){
                                
                 if(nav.isActiveAndEnabled){
@@ -112,7 +104,6 @@ namespace PudimdimGames{
         void NoiseCheck(){
             if(distance <= noiseTravelDistance){
                 
-                AudioManager.Instance.PlaySFX(heardNoiseSound, 0.5f);
                 if(CountDownTimer.TimerInstance == null){
                     if(PickUpItem.pickUpInstance.getItemSound){
                         aiHeardPlayer = true;
@@ -190,7 +181,6 @@ namespace PudimdimGames{
 
         void Patrol(){
             if(move){    
-                AudioManager.Instance.PlaySFX(lostPlayerSound, 10f);
                 stateText = "Patrol Mode";
                 Vector3 LookAtPos = new Vector3(moveSpots[randomSpot].position.x,transform.position.y,moveSpots[randomSpot].position.z);
                 transform.LookAt(LookAtPos);
@@ -216,7 +206,6 @@ namespace PudimdimGames{
 
         void ChasePlayer(){            
                if(distance > distToPlayer){ 
-                    AudioManager.Instance.PlaySFX(foundPlayerSound, 10f);
                     stateText = "Chase Mode";
                     nav.speed = normalSpeed;
                     transform.LookAt(Comp_CharacterController.playerPos);
