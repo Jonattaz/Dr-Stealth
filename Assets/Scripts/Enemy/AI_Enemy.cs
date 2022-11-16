@@ -57,6 +57,8 @@ namespace PudimdimGames{
         float normalSpeed = 2;
         [SerializeField] private bool caught; 
 
+        [SerializeField] GameObject[] itens;
+
         /// Awake is called when the script instance is being loaded.
         void Awake(){
             nav = GetComponent<NavMeshAgent>();
@@ -77,7 +79,6 @@ namespace PudimdimGames{
             distance = Vector3.Distance(Comp_CharacterController.playerPos, transform.position);
             anim.SetFloat("Speed", nav.speed);
             
-         
             if(!caught){
                                
                 if(nav.isActiveAndEnabled){
@@ -102,30 +103,38 @@ namespace PudimdimGames{
         }
 
         void NoiseCheck(){
-            if(distance <= noiseTravelDistance){
-                
-                if(CountDownTimer.TimerInstance == null){
-                    if(PickUpItem.pickUpInstance.getItemSound){
+            for (int i = 0; i < itens.Length; i++){
+                if(Vector3.Distance(transform.position, itens[i].GetComponent<PickUpItem>().getItemPos) <= noiseTravelDistance){
+                                        
+                    if(itens[i].GetComponent<PickUpItem>().getItemSound){
                         aiHeardPlayer = true;
-                        stateText = "Enemy Heard a Noise";
-                        Debug.Log("Enemy Heard a Noise");
-
-                        noisePosition = PickUpItem.pickUpInstance.getItemPos;
-                    }else{
-                        aiHeardPlayer = false;
-                    }
-                }else{
-                    if(PickUpItem.pickUpInstance.getItemSound || CountDownTimer.TimerInstance.noise){
-                        aiHeardPlayer = true;
-                        stateText = "Enemy Heard a Noise";
-                        Debug.Log("Enemy Heard a Noise");
-                    if(CountDownTimer.TimerInstance.noise){
-                        noisePosition = CountDownTimer.TimerInstance.getObjPos;
-                    }else{
-                        noisePosition = PickUpItem.pickUpInstance.getItemPos;
-                    }         
-                    }else{
-                        aiHeardPlayer = false;
+                        if(CountDownTimer.TimerInstance == null){
+                            if(itens[i].GetComponent<PickUpItem>().getItemSound){
+                                aiHeardPlayer = true;
+                                stateText = "Enemy Heard a Noise";
+                                Debug.Log("Enemy Heard a Noise CountDown");
+                                noisePosition = itens[i].GetComponent<PickUpItem>().getItemPos;
+                            }
+                        }else{       
+                            if(itens[i].GetComponent<PickUpItem>().getItemSound || CountDownTimer.TimerInstance.noise){
+                                aiHeardPlayer = true;
+                                stateText = "Enemy Heard a Noise";
+                                Debug.Log("Enemy Heard a Noise countdown else " + aiHeardPlayer);
+                                if(CountDownTimer.TimerInstance.noise){
+                                    noisePosition = CountDownTimer.TimerInstance.getObjPos;
+                                    
+                                }else{
+                                    noisePosition = itens[i].GetComponent<PickUpItem>().getItemPos;
+                                }
+                                         
+                            }
+                        }
+                        
+                        if(Vector3.Distance(transform.position, itens[i].GetComponent<PickUpItem>().getItemPos) <= 1.7f){
+                            itens[i].GetComponent<PickUpItem>().getItemSound = false;
+                            aiHeardPlayer = false;
+                        }
+    
                     }
                 }
             }
@@ -136,7 +145,7 @@ namespace PudimdimGames{
             nav.speed = normalSpeed;
             nav.SetDestination(noisePosition);
             stateText = "Enemy heard a noise";
-            if(Vector3.Distance(transform.position, noisePosition) <= 3f && canSpin == true){
+            if(Vector3.Distance(transform.position, noisePosition) <= noiseTravelDistance && canSpin == true){
                 isSpinningTime += Time.deltaTime;
                 transform.Rotate(Vector3.up * spinSpeed, Space.World);
 
@@ -219,6 +228,7 @@ namespace PudimdimGames{
                }
             
         }
+
 
         void FacePlayer(){
             Vector3 direction = (Comp_CharacterController.playerPos - transform.position).normalized;

@@ -14,7 +14,7 @@ namespace PudimdimGames{
         public string stateHolder;
         
         // 0 = Patrol, 1 = Chase, 2 = Heard a noise, 3 = You got caught
-        private int IconId;
+        [SerializeField] private int IconId;
 
         [SerializeField] private GameObject[] detectionIcons;
         [SerializeField] private GameObject aiLocal;

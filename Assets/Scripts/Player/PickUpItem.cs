@@ -12,9 +12,7 @@ namespace PudimdimGames{
         [SerializeField] private Transform player;
         [SerializeField] AudioClip itemNoise;
         private Rigidbody rb;
-        public static PickUpItem pickUpInstance;
         private Vector3 itemPos;
- 
 
         [SerializeField] private float pickUpDistance;
         [SerializeField] private float forceMulti;
@@ -40,7 +38,6 @@ namespace PudimdimGames{
         // Start is called before the first frame update
         void Start(){
             itemSound = false;
-            pickUpInstance = this;
             noiseMode = false;
             int itemLayer = this.gameObject.layer;
             for (int i = 0; i < 32; i++){
@@ -134,6 +131,7 @@ namespace PudimdimGames{
             getItemSound = itemSound;
             if(noiseMode){
                 itemSound = true;
+                getItemSound = itemSound;
                 Papae.UnitySDK.Managers.AudioManager.Instance.PlaySFX(itemNoise, 1f);
                 
             }
@@ -144,7 +142,7 @@ namespace PudimdimGames{
             getItemSound = itemSound;
             noiseMode = false;
             if(!noiseMode){
-                itemSound =false;
+                //itemSound = false;
             }
         }
 

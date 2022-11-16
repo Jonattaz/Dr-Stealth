@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Papae.UnitySDK.Managers;
 
 namespace PudimdimGames {
@@ -28,6 +29,8 @@ namespace PudimdimGames {
         [SerializeField] public GameObject doorOrVent;
 
         [SerializeField] private bool makeNoise;
+        [SerializeField] private bool endGame;
+        [SerializeField] private string EndGameScene;
     
         /// Awake is called when the script instance is being loaded.
         void Awake(){
@@ -70,6 +73,10 @@ namespace PudimdimGames {
             } else if(restart) {
                 currentTime = startingTime;
                 restart = !restart;
+                if(endGame){
+                    SceneManager.LoadScene(EndGameScene, LoadSceneMode.Single);
+
+                }
             }
         }
 
