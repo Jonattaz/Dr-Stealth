@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PudimdimGames{
     
@@ -8,15 +9,13 @@ namespace PudimdimGames{
     {
         [SerializeField] private Transform teleportTarget;
         [SerializeField] private GameObject player;
-        [SerializeField] public bool canTeleport;
+        public bool canTeleport;
         public GameObject QTE;
-
+        [SerializeField] private bool endGame;
         [SerializeField] private bool hasQTE;  
-
+        [SerializeField] private string EndGameScene;
         void OnTriggerEnter(Collider other){
              
-            
-
             if(!canTeleport && hasQTE){
                 QTE.SetActive(true);
                 CountDownTimer.TimerInstance.canCount = true;
@@ -30,13 +29,20 @@ namespace PudimdimGames{
 
        void OnTriggerStay(Collider other){
             if(canTeleport){
-                StartCoroutine(Teleport());
-                CameraFade.FadeInstance.Fade();
-                player.GetComponent<Comp_CharacterController>().enabled = false;
+               if(endGame){
+                    CameraFade.FadeInstance.Fade();
+                    player.GetComponent<Comp_CharacterController>().enabled = false;
+                    StartCoroutine(LoadEndGame());
+               }else{
+                    StartCoroutine(Teleport());
+                    CameraFade.FadeInstance.Fade();
+                    player.GetComponent<Comp_CharacterController>().enabled = false;
+               } 
+                
             }
 
         }
-   
+    
          /// <summary>
          /// OnTriggerExit is called when the Collider other has stopped touching the trigger.
          /// </summary>
@@ -59,5 +65,13 @@ namespace PudimdimGames{
             
         }
         
+        
+        IEnumerator LoadEndGame(){
+            yield return new WaitForSeconds(1);
+            SceneManager.LoadScene(EndGameScene, LoadSceneMode.Single);
+                   
+        }
+    
+
     }
 }

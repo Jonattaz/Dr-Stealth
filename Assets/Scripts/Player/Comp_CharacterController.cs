@@ -311,23 +311,22 @@ namespace PudimdimGames
 
                 
                 CheatController.cheatInstance.canLoad = true;
-                Debug.Log("Salvou yeah");
             }
 
             if(other.gameObject.CompareTag("Prisão")){
-                AudioManager.Instance.PlayBGM(prisaoSound, MusicTransition.LinearFade, 4f);
+                AudioManager.Instance.PlayBGM(prisaoSound, MusicTransition.LinearFade, 2f);
 
             }else if(other.gameObject.CompareTag("CentralComando")){
-                AudioManager.Instance.PlayBGM(centralComandoSound, MusicTransition.LinearFade, 4f);
+                AudioManager.Instance.PlayBGM(centralComandoSound, MusicTransition.LinearFade, 2f);
 
             }else if(other.gameObject.CompareTag("SalaFinal")){
-                AudioManager.Instance.PlayBGM(salaFinalSound, MusicTransition.LinearFade, 4f);
+                AudioManager.Instance.PlayBGM(salaFinalSound, MusicTransition.LinearFade, 2f);
 
             }else if(other.gameObject.CompareTag("OpEspeciais")){
-                AudioManager.Instance.PlayBGM(opEspeciaisSound, MusicTransition.LinearFade, 4f);
+                AudioManager.Instance.PlayBGM(opEspeciaisSound, MusicTransition.LinearFade, 2f);
 
             }else if(other.gameObject.CompareTag("TestesNucleares")){
-                AudioManager.Instance.PlayBGM(salaTesteNuclearSound, MusicTransition.LinearFade, 4f);
+                AudioManager.Instance.PlayBGM(salaTesteNuclearSound, MusicTransition.LinearFade, 2f);
 
             }
 

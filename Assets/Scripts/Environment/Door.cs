@@ -47,20 +47,21 @@ namespace PudimdimGames{
                 
                 canOpen = canOpenGet;
                 CountDownTimer.TimerInstance.canCount = true;
+            }else{     
+                if(key){
+                    canOpenGet = true;
+                }else{                
+                    if(other.gameObject.CompareTag("Player")){
+                        needKeyText.SetActive(true);
+                    }
+                }
             }
             
             if (UnityEngine.Input.GetKey("e") && canOpen ){
                 swivelAnnimation.SetBool("buttonDown", true);
             }
 
-            
-            if(key){
-                canOpenGet = true;
-            }else{                
-                if(other.gameObject.CompareTag("Player")){
-                    needKeyText.SetActive(true);
-                }
-            }
+           
     
         }
 
