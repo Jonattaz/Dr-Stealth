@@ -8,6 +8,7 @@ namespace PudimdimGames{
 
     public class PickUpItem : MonoBehaviour
     {
+        [SerializeField] private GameObject itemText;
         [SerializeField] private Transform pickUpPoint;
         [SerializeField] private Transform player;
         [SerializeField] AudioClip itemNoise;
@@ -53,7 +54,8 @@ namespace PudimdimGames{
 
         // Update is called once per frame
         void Update(){
-
+            pickUpDistance = Vector3.Distance(player.position, transform.position);
+            
             if(UnityEngine.Input.GetKey(KeyCode.F) && itemIsPicked == true && readyToThrow){
                 this.transform.position = pickUpPoint.position;
                 this.transform.parent = pickUpPoint.transform;
@@ -64,24 +66,24 @@ namespace PudimdimGames{
                 
                 DrawProjection();
             }            
+            
+             if(pickUpDistance <= 1 && itemIsPicked && forceMulti <= 10){
+                    this.transform.position = pickUpPoint.position;
+            }  
 
-            if(pickUpDistance <= 2 && itemIsPicked && forceMulti <= 10){
-                this.transform.position = pickUpPoint.position;
-            }
+           
 
-            pickUpDistance = Vector3.Distance(player.position, transform.position);
-
-            if(pickUpDistance <= 2){
+            if(pickUpDistance <= 1){     
                 if(UnityEngine.Input.GetKeyDown(KeyCode.F) && itemIsPicked == false && pickUpPoint.childCount < 1){
                     GetComponent<Rigidbody>().useGravity = false;
                     GetComponent<BoxCollider>().enabled = false;
                     this.transform.position = pickUpPoint.position;
                     this.transform.parent = pickUpPoint.transform;
-
                     itemIsPicked = true;
                     forceMulti = 0;
                 }
             }
+
 
             if(UnityEngine.Input.GetKeyUp(KeyCode.F) && itemIsPicked == true){
                 readyToThrow = true;
@@ -91,7 +93,6 @@ namespace PudimdimGames{
                     GetComponent<Rigidbody>().useGravity = true;
                     GetComponent<BoxCollider>().enabled = true;
                     itemIsPicked = false;
-
                     noiseMode = true;
                     forceMulti = 0;
                     readyToThrow = false;
@@ -141,9 +142,6 @@ namespace PudimdimGames{
         {
             getItemSound = itemSound;
             noiseMode = false;
-            if(!noiseMode){
-                //itemSound = false;
-            }
         }
 
          IEnumerator TrackTarget(){
