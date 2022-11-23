@@ -9,6 +9,7 @@ namespace PudimdimGames
     public enum CharacterStance{Standing, Crouching, Proning}
     public class Comp_CharacterController : MonoBehaviour
     {
+        [SerializeField] private GameObject saveText;
         [Header("Doors")]
         [SerializeField] private GameObject[] doors;
        
@@ -295,7 +296,11 @@ namespace PudimdimGames
         }
 
         void OnTriggerEnter(Collider other){
-            if(other.gameObject.CompareTag("SavePoint")){
+            if(other.gameObject.CompareTag("SavePoint")){     
+                StartCoroutine(SaveTextCorroutine());
+
+
+
                 // Script.Method(name, value) - Estrutura da linha
                 BlazeSave.SaveData("PlayerPosX", gameObject.transform.position.x);
                 BlazeSave.SaveData("PlayerPosY", gameObject.transform.position.y);
@@ -352,6 +357,13 @@ namespace PudimdimGames
 
                 gameObject.transform.position = new Vector3(xvalue, yvalue, zvalue);
                 
+        }
+        
+        
+        IEnumerator SaveTextCorroutine(){
+            saveText.SetActive(true);
+            yield return new WaitForSeconds(1);
+            saveText.SetActive(false);
         }
 
     }
