@@ -8,6 +8,7 @@ namespace PudimdimGames{
 
     public class PickUpItem : MonoBehaviour
     {
+        [SerializeField] private GameObject throwIcon;
         [SerializeField] private GameObject itemText;
         [SerializeField] private Transform pickUpPoint;
         [SerializeField] private Transform player;
@@ -31,6 +32,8 @@ namespace PudimdimGames{
         [Range(10, 100)]
         [SerializeField] private int linePoints = 25;
         [SerializeField] [Range(0.01f, 0.10f)] 
+
+        
 
         private float timeBetweenPoints = 0.01f;
         private LayerMask itemCollisionMask;
@@ -75,6 +78,7 @@ namespace PudimdimGames{
 
             if(pickUpDistance <= 1){     
                 if(UnityEngine.Input.GetKeyDown(KeyCode.F) && itemIsPicked == false && pickUpPoint.childCount < 1){
+                    throwIcon.SetActive(true);
                     GetComponent<Rigidbody>().useGravity = false;
                     GetComponent<BoxCollider>().enabled = false;
                     this.transform.position = pickUpPoint.position;
@@ -88,6 +92,7 @@ namespace PudimdimGames{
             if(UnityEngine.Input.GetKeyUp(KeyCode.F) && itemIsPicked == true){
                 readyToThrow = true;
                 if(forceMulti > 10){
+                    throwIcon.SetActive(false);
                     rb.AddForce(player.transform.forward * forceMulti );
                     this.transform.parent = null;
                     GetComponent<Rigidbody>().useGravity = true;

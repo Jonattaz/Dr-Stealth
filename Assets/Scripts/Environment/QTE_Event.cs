@@ -24,12 +24,14 @@ namespace PudimdimGames{
 
         [SerializeField] private float fillHold;
         
+        [SerializeField] private GameObject lockpickIcon;
 
         
         // Update is called once per frame
         void Update()
         {
             if(UnityEngine.Input.GetKeyDown("e")){
+                lockpickIcon.SetActive(true);
                 fillAmount += fillValue;
                 AudioManager.Instance.PlaySFX(lockpickingSound, 1f);
             }
@@ -55,6 +57,7 @@ namespace PudimdimGames{
                 }else{
                     tubulacao.GetComponent<Teleporting>().canTeleport = true;
                 }
+                lockpickIcon.SetActive(false);
             }
 
             GetComponent<Image>().fillAmount = fillAmount;

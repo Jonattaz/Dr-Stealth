@@ -10,6 +10,8 @@ namespace PudimdimGames{
         [SerializeField] private GameObject mainCam;
         [SerializeField] private GameObject menu;
         [SerializeField] private GameObject deathMenu;
+        
+        [SerializeField] private GameObject actionHUD;
 
         [SerializeField] private string menuScene;
         [SerializeField] private string reloadScene;
@@ -41,11 +43,13 @@ namespace PudimdimGames{
                 if(mainCam.activeInHierarchy){
                     // Ativar menu
                     isPaused = false;
+                    actionHUD.SetActive(false);
                     mainCam.SetActive(false);
                     menu.SetActive(true);
                 }else{
                     isPaused = true;
                     // Desativar menu
+                    actionHUD.SetActive(true);
                     menu.SetActive(false);
                     mainCam.SetActive(true);
                 }
