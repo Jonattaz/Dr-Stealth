@@ -62,6 +62,11 @@ namespace PudimdimGames{
 
             GetComponent<Image>().fillAmount = fillAmount;
         }
+
+        void OnTriggerExit(Collider other)
+        {
+            lockpickIcon.SetActive(false);
+        }
     }
 }
 
