@@ -15,6 +15,7 @@ namespace PudimdimGames{
         [SerializeField] private bool endGame;
         [SerializeField] private bool hasQTE;  
         [SerializeField] private string EndGameScene;
+        [SerializeField] private GameObject lockpickIcon;
         
         
         void OnTriggerEnter(Collider other){
@@ -37,16 +38,18 @@ namespace PudimdimGames{
         }
 
        void OnTriggerStay(Collider other){
-            if(canTeleport){
-               if(endGame){
-                    CameraFade.FadeInstance.Fade();
-                    player.GetComponent<Comp_CharacterController>().enabled = false;
-                    StartCoroutine(LoadEndGame());
-               }else{
-                    StartCoroutine(Teleport());
-                    CameraFade.FadeInstance.Fade();
-                    player.GetComponent<Comp_CharacterController>().enabled = false;
-               }                
+            if(!outOfBound){
+                if(canTeleport){
+                    if(endGame){
+                            CameraFade.FadeInstance.Fade();
+                            player.GetComponent<Comp_CharacterController>().enabled = false;
+                            StartCoroutine(LoadEndGame());
+                    }else{
+                            StartCoroutine(Teleport());
+                            CameraFade.FadeInstance.Fade();
+                            player.GetComponent<Comp_CharacterController>().enabled = false;
+                    }                
+                }
             }
         }
          /// <summary>
@@ -59,6 +62,7 @@ namespace PudimdimGames{
                 CountDownTimer.TimerInstance.canCount = false;
                 CountDownTimer.TimerInstance.restart = true;
                 CountDownTimer.TimerInstance.noise = false;
+                lockpickIcon.SetActive(false);
            }
          }
 

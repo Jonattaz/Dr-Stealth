@@ -50681,17 +50681,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5429289959491072023}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.004537886, w: 0.99998975}
   m_LocalPosition: {x: 0, y: 0, z: -1.051}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5206668380526012357}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.52}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.38, y: -17.84}
-  m_SizeDelta: {x: 183.21, y: 5.08}
+  m_AnchoredPosition: {x: -6.38, y: -33.28}
+  m_SizeDelta: {x: 183.21, y: -25.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5208968071029229093
 CanvasRenderer:
@@ -50846,8 +50846,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Dr.Stealth
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 09a79ab1bd1445c4db6d193b62215627, type: 2}
-  m_sharedMaterial: {fileID: -371823006621224315, guid: 09a79ab1bd1445c4db6d193b62215627, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5e49385e97e497e47be9a7638270f9f3, type: 2}
+  m_sharedMaterial: {fileID: 3631197327879121868, guid: 5e49385e97e497e47be9a7638270f9f3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -50871,8 +50871,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1000
-  m_fontSizeBase: 1000
+  m_fontSize: 1500
+  m_fontSizeBase: 1500
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -50935,7 +50935,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -371823006621224315, guid: 09a79ab1bd1445c4db6d193b62215627, type: 2}
+  - {fileID: 3631197327879121868, guid: 5e49385e97e497e47be9a7638270f9f3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
