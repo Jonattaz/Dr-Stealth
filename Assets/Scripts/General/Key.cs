@@ -18,7 +18,6 @@ namespace PudimdimGames
                 keyText.SetActive(true);
                 if(UnityEngine.Input.GetKeyUp(KeyCode.E)){
                     keyText.SetActive(false);
-                    Debug.Log("Porra");
                 }
             }
         
